@@ -2,18 +2,45 @@
 
 ## Problem
 
-The Science Center plaza is a very popular area.
+The Science Center plaza is a very popular area, home to food trucks, students,
+and tourists. The Science Center Plaza also has a live stream video feed 24 
+hours per day, which you can check out
+[here](https://commonspaces.harvard.edu/plaza-webcam).
+However, can we use this data to make decisions, such as when to schedule
+events in the plaza? However, we only have a large amount of raw video data,
 
-TODO: Fill out problem
+Our project provides real-time crowd analytics with object detection of people
+and average interframe and intraframe metrics, such as number of people, group
+size, velocity, and location heatmap for a given time period.
+We analyze 700 hours of video and then use streaming to compare the real-time
+current analytics to the historical data for the corresponding time period in
+order to detect interesting events such as large groups of people or fast
+movement.
 
-## Solution
+## Why Big Data? 
+
+This problem requires the use of multiple frameworks:
+
+* __Big Data:__ because we process 150 GB of low-resolution historical video.
+* __HPC:__: handling the throughput for streaming analytics of real-time science
+center plaza video feed
+
+## Infrastructures and Methodologies
+
+Our solution uses a pre-trained neural network (Faster R-CNN) across 8 GPUs to
+identify bounding boxes of people, and then 32 CPU cores to compute the
+analytics. For infrastructure, we use AWS EMR, Databricks on Spark ML to run
+our TensorFlow model, and Spark Streaming for real-time analytics.
 
 ## The Technical Stuff
 
-We used a deep convolutional neural net using the Faster-RCNN architecture [1] for detecting people, bicycles, cars, and trucks.
-We used a pretrained model that was trained on Microsoft COCO [2], a dataset of common objects in context.
-The dataset is composed of a large number of images with a total of 91 unique objects with labels; however, we only care detecting pedestrians,
-so we only focus on detecting one class (person).
+We used a deep convolutional neural net using the Faster-RCNN architecture [1]
+for detecting people, bicycles, cars, and trucks.
+We used a pretrained model that was trained on Microsoft COCO [2], a dataset of
+common objects in context.
+The dataset is composed of a large number of images with a total of 91 unique
+objects with labels; however, we only care detecting pedestrians, so we only
+focus on detecting one class (person).
 
 ## Code and Data
 
