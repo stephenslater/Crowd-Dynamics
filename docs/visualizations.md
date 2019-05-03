@@ -1,9 +1,4 @@
-# Crowd Dynamics at Harvard University
+# Visualizations 
 
-## Test
+Here are some visualizations of what the detections look like.
 
-
-
-## Test
-
-## Hello WOr
