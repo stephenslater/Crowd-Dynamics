@@ -26,3 +26,18 @@ Check out the heatmap of where people are standing in the image here.
       </iframe>
     </body>
 </html>
+
+## Average Velocity Distribution
+
+Ever wonder when people are moving around the plaza the most?
+We're able to see when people start moving around the square, and how many
+people are moving at any point in time.
+
+<iframe src="synthetic_velocities.html"
+    sandbox="allow-same-origin allow-scripts"
+    width="100%"
+    height="500"
+    scrolling="no"
+    seamless="seamless"
+    frameborder="0">
+</iframe>
