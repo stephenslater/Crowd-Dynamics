@@ -6,6 +6,21 @@
 :root {
     --primary: firebrick; 
   }
+
+.logo{
+    height: 75px;
+    width: 273;
+    margin: auto
+}
+
+.page-link:hover{
+    color: var(--primary);
+}
+
+.post-title{
+    size: 32!important;
+}
+
   
 .site-title{
     text-align: center;
@@ -13,6 +28,11 @@
     font-weight: 600;
     font-size: 40px;
     padding-top: 10px;
+}
+
+.site-header{
+    display: flex;
+    justify-content: space-around;
 }
 
 .site-nav{
@@ -24,12 +44,10 @@
     color: black!important;
 }
 
-.page-link:hover{
-    color: var(--primary);
-}
-
-.post-title{
-    size: 32!important;
+.wrapper{
+    max-width: calc(800px - (30px * 2));
+    margin: auto;
+    padding: 0px;
 }
 
 .youtube{
