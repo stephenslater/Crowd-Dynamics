@@ -14,23 +14,19 @@ Our pipeline looks like this:
 
 Our project can be split up into multiple stages.
 
-### Video Processing
+### Video Processing and Object Detection
 
-First, we process the historical video records of the Science Center Plaza.
-We used 144 cores to turn the historical video into individual frames,
-encoded losslessly as `.png` files.
-These individual `.png` frames are then stored into the AWS EMRFS, which is the
-filesystem associated with our AWS EMR cluster. 
-
-### Bounding Boxes
-
+First, we read in the historical video records of the Science Center Plaza.
 We then use Tensorflow for our machine learning to generate bounding boxes
 around objects of interest, including people, food trucks, bicycles, and cars.
-We used the Tensorflow framework, and used between one to eight `p2.xlarge`
-instances to generate the bounding boxes.
-The bounding boxes are outputted into a Spark Dataframe, which is then used
-to run our analytics.
+We used the Tensorflow framework, and used one `p3.8xlarge` instance (which has 4 GPUs)
+to generate bounding boxes and class scores. Bounding boxes and scores are output into Spark 
+dataframes, which is then used to run our analytics.
 
 ### Analytics
 
 TODO: Write up analytics section
+
+### Visualizations
+
+TODO: Write up visualizations section
