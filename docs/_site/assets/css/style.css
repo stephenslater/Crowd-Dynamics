@@ -197,7 +197,7 @@ table td { border: 1px solid #e8e8e8; }
 
 :root { --primary: firebrick; }
 
-.logo { height: 75px; width: 273; margin: auto; }
+.h_logo { height: 75px; width: 273; margin: auto; }
 
 .page-link:hover { color: var(--primary); }
 
