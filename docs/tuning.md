@@ -42,9 +42,4 @@ We evaluate the model's performance during different times of the day.
 
 #### Nighttime, around 8 PM
 
-<html>
- <body>
-  <object data="https://www.youtube.com/embed/KnjFIt1sypg"
-   width="560" height="315"></object>
- </body>
-</html>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/KnjFIt1sypg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
