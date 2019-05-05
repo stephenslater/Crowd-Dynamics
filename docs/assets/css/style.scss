@@ -1,0 +1,65 @@
+---
+---
+
+@import "minima";
+
+:root {
+    --primary: firebrick; 
+  }
+
+.h_logo{
+    height: 75px;
+    width: 273;
+    margin: auto
+}
+
+.page-link:hover{
+    color: var(--primary);
+}
+
+.post-title{
+    size: 32!important;
+}
+
+  
+.site-title{
+    text-align: center;
+    width: 100%;
+    font-weight: 600;
+    font-size: 40px;
+    padding-top: 10px;
+}
+
+.site-header{
+    display: flex;
+    justify-content: space-around;
+}
+
+.site-nav{
+    width: 100%;
+    text-align: center;
+}
+
+.site-title{
+    color: black!important;
+}
+
+.wrapper{
+    max-width: calc(800px - (30px * 2));
+    margin: auto;
+    padding: 0px;
+}
+
+.youtube{
+    border: 1px solid dark-grey; 
+    display: block; 
+    margin-left: auto; 
+    margin-right: auto; 
+    width: 560;
+    border: 1px solid gray;
+    border-radius: 2px;
+}
+
+// h1{
+//     color: var(--primary);
+// }

@@ -42,4 +42,4 @@ It's also nice to be able to look at the detections themselves.
 We are able to get the detections and plot different classes to check if the
 detections are reasonable.
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/eN9tTVJ9J2c" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display: block; margin-left: auto; margin-right: auto; width: 560"></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/eN9tTVJ9J2c" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="youtube"></iframe>

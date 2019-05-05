@@ -35,12 +35,12 @@ We evaluate the model's performance during different times of the day.
 
 #### Daytime, Not Crowded
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/F08-z8duKIE" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/F08-z8duKIE" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="youtube"></iframe>
 
 #### Slightly Darker, Not Crowded
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/ZR53NL4JOVU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/ZR53NL4JOVU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="youtube"></iframe>
 
 #### Nighttime, around 8 PM
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/KnjFIt1sypg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/KnjFIt1sypg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="youtube"></iframe>
