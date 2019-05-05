@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en"><head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.5.0 -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.5.0 -->
 <title>Performance | Crowd Dynamics at Harvard University</title>
 <meta name="generator" content="Jekyll v3.8.5" />
 <meta property="og:title" content="Performance" />
@@ -15,8 +15,7 @@
 <script type="application/ld+json">
 {"url":"http://localhost:4000/performance.html","headline":"Performance","description":"Repository for CS 205 Final Project, Spring 2019","@type":"WebPage","@context":"http://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
-<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Crowd Dynamics at Harvard University" /></head>
-<body><header class="site-header" role="banner">
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Crowd Dynamics at Harvard University" /></head><body><header class="site-header" role="banner">
 
   <div class="wrapper"><a class="site-title" rel="author" href="/">Crowd Dynamics at Harvard University</a><nav class="site-nav">
         <input type="checkbox" id="nav-trigger" class="nav-trigger" />
@@ -40,7 +39,26 @@
   </header>
 
   <div class="post-content">
-    <p>TODO: Talk about performance</p>
+    <h2 id="theoretical-speedup">Theoretical Speedup</h2>
+
+<p>We use Gustafson’s Law to calculate speedup:</p>
+
+<script type="math/tex; mode=display">S=p+(1-p)s</script>
+
+<p>Running 8 p2.xlarge instances as worker nodes gives <script type="math/tex">p=8</script>. We can then calculate the speedup for the two steps of our calculations.</p>
+
+<ol>
+    <li>Create bounding boxes with NNs (fully parallelizable, store boxes in s3)</li>
+    $$S = 8 + (-7)0 = 8$$
+    <li>Compute analytics from bounding boxes in Spark: 8 workers, 2 cores per worker, 2 threads per core</li>
+    $$S=32$$
+
+</ol>
+
+<p>TODO: Talk about performance</p>
+
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+
 
   </div>
 

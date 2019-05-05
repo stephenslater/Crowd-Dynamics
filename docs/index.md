@@ -65,11 +65,13 @@ such as Spark, we are able to quantify some of the patterns in the Science
 Center.
 In the data, we are able to see:
 
-1. Tour groups traveling through the yard.
-2. The line for food trucks.
-3. The influx of people when classes are dismissed.
-4. How long people stay in the science center plaza to eat.
-5. and many more!
+<ul>
+    <li>Tour groups traveling through the yard.</li>
+    <li>The line for food trucks.</li>
+    <li>The influx of people when classes are dismissed.</li>
+    <li>How long people stay in the science center plaza to eat.</li>
+    <li>and many more!</li>
+</ul>
 
 ## Citations
 
