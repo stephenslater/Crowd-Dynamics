@@ -183,7 +183,8 @@ df.show()
 """
 
 # seconds = window_minutes * 60
-agg_df = (df.groupBy(window("timestamp", windowDuration="{} minutes".format(seconds), slideDuration="{} minutes".format(seconds)))
+window_str = '{} minutes'.format(window_minutes)
+agg_df = (df.groupBy(window('timestamp', windowDuration=window_str, slideDuration=window_str))
            .agg(F.sum('num_people'),
                 F.sum('num_groups'),
                 F.sum('sum_velocities'),
