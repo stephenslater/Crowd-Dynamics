@@ -55,7 +55,7 @@ TODO: Add S3 links to our data files.
 
 <!-- <div style="width:100%; background-color:red; height: 308px"> -->
 
-<iframe src="https://giphy.com/embed/cms6JM0agpP9HfWIEy" width="480" height="308" frameBorder="0" class="giphy-embed" style="display: block; margin-left: auto; margin-right: auto;width: 480px" allowFullScreen></iframe>
+<iframe src="https://giphy.com/embed/cms6JM0agpP9HfWIEy" width="720" height="462" frameBorder="0" class="giphy-embed" style="display: block; margin-left: auto; margin-right: auto;width: 720px" allowFullScreen></iframe>
 
 <!-- </div> -->
 
