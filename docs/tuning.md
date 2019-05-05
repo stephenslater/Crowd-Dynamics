@@ -1,4 +1,4 @@
-# Tuning our Pipeline
+# Tuning
 
 ## Object Detection Model Selection
 
