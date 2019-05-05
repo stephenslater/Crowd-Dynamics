@@ -23,4 +23,4 @@ movement.
 
 Our documentation is available on Github Pages.
 You can find it
-[here](https://stephenslater.github.io/Crowd-Dynamics/)
+[here.](https://stephenslater.github.io/Crowd-Dynamics/)
