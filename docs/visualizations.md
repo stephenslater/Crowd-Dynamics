@@ -14,7 +14,7 @@ Check out the heatmap of where people are standing in the image here.
 <iframe src="locations.html"
         sandbox="allow-same-origin allow-scripts"
         width="100%"
-        height="500"
+        height="550"
         scrolling="no"
         seamless="seamless"
         frameborder="0">
@@ -29,7 +29,7 @@ people are moving at any point in time.
 <iframe src="synthetic_velocities.html"
     sandbox="allow-same-origin allow-scripts"
     width="100%"
-    height="500"
+    height="550"
     scrolling="no"
     seamless="seamless"
     frameborder="0">
