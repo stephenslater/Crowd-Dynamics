@@ -1,4 +1,4 @@
-# Requirements for CS205
+# Requirements
 
 1. Description of problem and the need for HPC and/or Big Data
 2. Description of solution and comparison with existing work on the problem

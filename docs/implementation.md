@@ -1,4 +1,7 @@
-# Platform and Infrastructure
+# Implementation
+
+Here we describe the infrastructure, technologies, and platforms we used
+throughout the entire pipeline.
 
 ## Data Pipeline
 
