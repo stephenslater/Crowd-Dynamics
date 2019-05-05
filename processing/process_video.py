@@ -41,52 +41,52 @@ def pred_from_frame(frames):
     frame = np.stack(frames)
     output = sess.run(output_tensors, 
          feed_dict={input_tensor: frame})
-    bboxes, score, classes = output['bboxes'], output['scores'], output['classes']
-    return bboxes, score, classes
+    bboxes, scores, n, classes = output['bboxes'], output['scores'], output['n'], output['classes']
+    return bboxes, scores, n, classes
 
 
-def process_video(video_path, batch_size=32, num_batches=100):
+def process_video(video_path, batch_size=32):
     cap = cv2.VideoCapture(video_path)
-    all_scores, all_classes, all_bboxes = [], [], []
+    all_scores, all_classes, all_n, all_bboxes = [], [], [], []
     start_time = time.time()
     video_running = True
-    for _ in tqdm.tqdm(range(num_batches)):
+    processed = 0
+    while video_running:
         frames = []
         for _ in range(batch_size):
+            cap.set(cv2.CAP_PROP_POS_MSEC,(processed * 1000))
             ret, frame = cap.read()
             if not ret:
                 print("Video finished")
                 video_running = False
                 break
             frames.append(frame)
-        bboxes, scores, classes = pred_from_frame(frames)
+            processed += 1
+        bboxes, scores, n, classes = pred_from_frame(frames)
         all_scores.append(scores)
         all_bboxes.append(bboxes)
+        all_n.append(n)
         all_classes.append(classes)
-
         if not video_running:
             break
-            
+        if processed % (batch_size * 10) == 0:
+            print('Batches processed: %d' % processed)
     print("Total time: {} seconds".format(int(time.time() - start_time)))
     full_bboxes = np.row_stack(all_bboxes)
     full_scores = np.row_stack(all_scores)
     full_classes = np.row_stack(all_classes)
-    return full_bboxes, full_scores, full_classes
-
+    return full_bboxes, full_scores, full_n, full_classes
 
 def make_predictions(videoname):
     video = os.path.join(VIDEO_PATH, videoname)
-    BATCH_SIZE =16 
-    NUM_BATCHES = 200
+    BATCH_SIZE = 32 
     start_time = time.time()
-    bboxes, scores, classes = process_video(
-        video, batch_size=BATCH_SIZE, num_batches=NUM_BATCHES)
+    bboxes, scores, classes = process_video(video, batch_size=BATCH_SIZE)
     end_time = time.time()
-    elapsed_time = np.array([end_time - start_time]) / BATCH_SIZE / NUM_BATCHES
+    print('Elapsed: %f' % (end_time - start_time))
     
     # saving everything
     filename = '{}-{}'.format(os.path.splitext(videoname)[0], CV_MODEL)
-    np.savez(filename, bboxes=bboxes, scores=scores, classes=classes,
-             inftime=elapsed_time)
+    np.savez(filename, bboxes=bboxes, scores=scores, classes=classes,)
             
 make_predictions(args.video)
