@@ -47,7 +47,7 @@ def pred_from_frame(frames):
     return bboxes, scores, n, classes
 
 
-def process_video(video_path, batch_size=32):
+def process_video(video_path, batch_size=32, skip=10):
     cap = cv2.VideoCapture(video_path)
     all_scores, all_classes, all_n, all_bboxes = [], [], [], []
     start_time = time.time()
@@ -56,11 +56,13 @@ def process_video(video_path, batch_size=32):
     while video_running:
         frames = []
         for _ in range(batch_size):
-            cap.set(cv2.CAP_PROP_POS_MSEC,(processed * 1000))
-            ret, frame = cap.read()
-            if not ret:
-                print("Video finished")
-                video_running = False
+            for _ in range(skip):
+                ret, frame = cap.read()
+                if not ret:
+                    print("Video finished")
+                    video_running = False
+                    break 
+            if not video_running:
                 break
             frames.append(frame)
             processed += 1
@@ -71,12 +73,12 @@ def process_video(video_path, batch_size=32):
         all_classes.append(classes)
         if not video_running:
             break
-        print('Frames processed: %d' % processed)
+    print('Frames processed: %d' % processed)
     print("Total time: {} seconds".format(int(time.time() - start_time)))
     full_bboxes = np.row_stack(all_bboxes)
     full_scores = np.row_stack(all_scores)
     full_classes = np.row_stack(all_classes)
-    full_n = np.row_stack(np.expand_dims(all_n, 0))
+    full_n = np.concatenate(all_n, axis=None)
     return full_bboxes, full_scores, full_n, full_classes
 
 def make_predictions(videoname):
@@ -88,7 +90,6 @@ def make_predictions(videoname):
     print('Elapsed: %f' % (end_time - start_time))
     
     # some cleaning
-    n = n.flatten()
     agg_bboxes = []
     agg_scores = []
     num_frames = len(bboxes) 
@@ -115,7 +116,7 @@ def make_predictions(videoname):
     df1.show()
  
     # saving everything
-    filename = '{}-{}'.format(os.path.splitext(videoname)[0], CV_MODEL)
-    np.savez(filename, bboxes=bboxes, scores=scores, classes=classes,)
+#    filename = '{}-{}'.format(os.path.splitext(videoname)[0], CV_MODEL)
+#    np.savez(filename, bboxes=bboxes, scores=scores, classes=classes,)
             
 make_predictions(args.video)
