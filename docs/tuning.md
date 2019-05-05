@@ -43,30 +43,19 @@ We evaluate the model's performance during different times of the day.
 
 #### Slightly Darker, Not Crowded
 
-<html>
- <body>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
- </body>
-</html>
 
 <html>
  <body>
-  <object data="http://www.youtube.com/embed/dQw4w9WgXcQ"
+  <object data="http://www.youtube.com/embed/ZR53NL4JOVU"
    width="560" height="315"></object>
  </body>
 </html>
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/F08-z8duKIE" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 #### Nighttime, around 8 PM
 
 <html>
  <body>
-  <object data="http://www.youtube.com/embed/W7qWa52k-nE"
+  <object data="https://www.youtube.com/embed/KnjFIt1sypg"
    width="560" height="315"></object>
  </body>
 </html>
-
-#### Testing
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/F08-z8duKIE" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
