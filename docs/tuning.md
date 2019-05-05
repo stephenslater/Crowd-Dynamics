@@ -34,10 +34,18 @@ We evaluate the model's performance during different times of the day.
 
 #### Daytime, Not Crowded
 
-<html>
 <iframe src="http://www.youtube.com/embed/F08-z8duKIE"
    width="560" height="315" frameborder="0" allowfullscreen></iframe>
-</html>
 
 #### Slightly Darker, Not Crowded
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+#### Nighttime, around 8 PM
+
+<html>
+ <body>
+  <object data="http://www.youtube.com/embed/W7qWa52k-nE"
+   width="560" height="315"></object>
+ </body>
+</html>
