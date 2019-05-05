@@ -1,5 +1,6 @@
-# Tuning
-
+---
+title: Tuning
+---
 ## Object Detection Model Selection
 
 One of the most important parts of our pipeline is the object detection model

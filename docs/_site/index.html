@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>Project Overview | Crowd Dynamics at Harvard University</title>
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="Project Overview" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Repository for CS 205 Final Project, Spring 2019" />
+<meta property="og:description" content="Repository for CS 205 Final Project, Spring 2019" />
+<link rel="canonical" href="http://localhost:4000/" />
+<meta property="og:url" content="http://localhost:4000/" />
+<meta property="og:site_name" content="Crowd Dynamics at Harvard University" />
+<script type="application/ld+json">
+{"url":"http://localhost:4000/","headline":"Project Overview","description":"Repository for CS 205 Final Project, Spring 2019","name":"Crowd Dynamics at Harvard University","@type":"WebSite","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Crowd Dynamics at Harvard University" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Crowd Dynamics at Harvard University</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/">Project Overview</a><a class="page-link" href="/implementation.html">Implementation</a><a class="page-link" href="/requirements.html">Requirements</a><a class="page-link" href="/tuning.html">Tuning</a><a class="page-link" href="/performance.html">Performance</a><a class="page-link" href="/visualizations.html">Visualizations</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <div class="home"><h1 class="page-heading">Project Overview</h1><h2 id="problem">Problem</h2>
+
+<p>The Science Center plaza is a very popular area, home to food trucks, students,
+and tourists. The Science Center Plaza also has a live stream video feed 24 
+hours per day, which you can check out
+<a href="https://commonspaces.harvard.edu/plaza-webcam">here</a>.
+However, can we use this data to make decisions, such as when to schedule
+events in the plaza? However, we only have a large amount of raw video data,</p>
+
+<p>Our project provides real-time crowd analytics with object detection of people
+and average interframe and intraframe metrics, such as number of people, group
+size, velocity, and location heatmap for a given time period.
+We analyze 700 hours of video and then use streaming to compare the real-time
+current analytics to the historical data for the corresponding time period in
+order to detect interesting events such as large groups of people or fast
+movement.</p>
+
+<h2 id="why-big-data">Why Big Data?</h2>
+
+<p>This problem requires the use of multiple frameworks:</p>
+
+<ul>
+  <li><strong>Big Data:</strong> because we process 150 GB of low-resolution historical video.</li>
+  <li><strong>HPC:</strong>: handling the throughput for streaming analytics of real-time science
+center plaza video feed</li>
+</ul>
+
+<h2 id="infrastructures-and-methodologies">Infrastructures and Methodologies</h2>
+
+<p>Our solution uses a pre-trained neural network (Faster R-CNN) across 8 GPUs to
+identify bounding boxes of people, and then 32 CPU cores to compute the
+analytics. For infrastructure, we use AWS EMR, Databricks on Spark ML to run
+our TensorFlow model, and Spark Streaming for real-time analytics.</p>
+
+<h2 id="the-technical-stuff">The Technical Stuff</h2>
+
+<p>We used a deep convolutional neural net using the Faster-RCNN architecture [1]
+for detecting people, bicycles, cars, and trucks.
+We used a pretrained model that was trained on Microsoft COCO [2], a dataset of
+common objects in context.
+The dataset is composed of a large number of images with a total of 91 unique
+objects with labels; however, we only care detecting pedestrians, so we only
+focus on detecting one class (person).</p>
+
+<h2 id="code-and-data">Code and Data</h2>
+
+<p>Our code can be found on Github
+<a href="http://www.github.com/stephenslater/crowd-dynamics">here</a>.</p>
+
+<p>TODO: Add S3 links to our data files.</p>
+
+<h2 id="visualizations">Visualizations</h2>
+
+<!-- <div style="width:100%; background-color:red; height: 308px"> -->
+
+<iframe src="https://giphy.com/embed/cms6JM0agpP9HfWIEy" width="720" height="462" frameborder="0" class="giphy-embed" style="display: block; margin-left: auto; margin-right: auto;width: 720px" allowfullscreen=""></iframe>
+
+<!-- </div> -->
+
+<p>Check out more visualizations <a href="visualizations.html">here!</a>
+Through the use of deep convolution neural networks and big data platforms
+such as Spark, we are able to quantify some of the patterns in the Science
+Center.
+In the data, we are able to see:</p>
+
+<ol>
+  <li>Tour groups traveling through the yard.</li>
+  <li>The line for food trucks.</li>
+  <li>The influx of people when classes are dismissed.</li>
+  <li>How long people stay in the science center plaza to eat.</li>
+  <li>and many more!</li>
+</ol>
+
+<h2 id="citations">Citations</h2>
+
+<ol>
+  <li>
+    <p>Ren, Shaoqing et al. “Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks.” IEEE Transactions on Pattern Analysis and Machine Intelligence 39.6 (2017): 1137–1149. Crossref. Web.</p>
+  </li>
+  <li>
+    <p>Lin, Tsung-Yi et al. “Microsoft COCO: Common Objects in Context.” Lecture Notes in Computer Science (2014): 740–755. Crossref. Web.</p>
+  </li>
+</ol>
+</div>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Crowd Dynamics at Harvard University</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Crowd Dynamics at Harvard University</li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Repository for CS 205 Final Project, Spring 2019</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

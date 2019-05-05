@@ -1,5 +1,6 @@
-# Visualizations
-
+---
+title: Visualizations
+---
 Here are some visualizations of what the detections look like.
 
 ## Hotspots
@@ -13,11 +14,11 @@ Check out the heatmap of where people are standing in the image here.
 
 <iframe src="locations.html"
         sandbox="allow-same-origin allow-scripts"
-        width="100%"
+        width="500"
         height="550"
         scrolling="no"
         seamless="seamless"
-        frameborder="0">
+        frameborder="0" style="display: block; margin-left: auto; margin-right: auto; width: 500">
 </iframe>
 
 ## Average Velocity Distribution
@@ -28,11 +29,11 @@ people are moving at any point in time.
 
 <iframe src="synthetic_velocities.html"
     sandbox="allow-same-origin allow-scripts"
-    width="100%"
+    width="500"
     height="550"
     scrolling="no"
     seamless="seamless"
-    frameborder="0">
+    frameborder="0" style="display: block; margin-left: auto; margin-right: auto; width: 500">
 </iframe>
 
 ## Looking at the Detections
@@ -41,4 +42,4 @@ It's also nice to be able to look at the detections themselves.
 We are able to get the detections and plot different classes to check if the
 detections are reasonable.
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/eN9tTVJ9J2c" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/eN9tTVJ9J2c" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display: block; margin-left: auto; margin-right: auto; width: 560"></iframe>

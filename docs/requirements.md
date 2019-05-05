@@ -1,5 +1,6 @@
-# Requirements
-
+---
+title: Requirements
+---
 1. Description of problem and the need for HPC and/or Big Data
 2. Description of solution and comparison with existing work on the problem
 3. Description of your model and/or data in detail: where did it come from, how did you acquire it, what does it mean, etc.

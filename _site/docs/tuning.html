@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>Tuning | Crowd-Dynamics</title>
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="Tuning" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Repository for CS 205 Final Project, Spring 2019" />
+<meta property="og:description" content="Repository for CS 205 Final Project, Spring 2019" />
+<link rel="canonical" href="http://localhost:4000/docs/tuning.html" />
+<meta property="og:url" content="http://localhost:4000/docs/tuning.html" />
+<meta property="og:site_name" content="Crowd-Dynamics" />
+<script type="application/ld+json">
+{"url":"http://localhost:4000/docs/tuning.html","description":"Repository for CS 205 Final Project, Spring 2019","@type":"WebPage","headline":"Tuning","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="/assets/css/style.css?v=8e50e18e3fb0bb1b18e191fb45bc29e8359c54e9">
+  </head>
+  <body>
+    <div class="container-lg px-3 my-5 markdown-body">
+      
+      <h1><a href="http://localhost:4000/">Crowd-Dynamics</a></h1>
+      
+
+      <h1 id="tuning">Tuning</h1>
+
+<h2 id="object-detection-model-selection">Object Detection Model Selection</h2>
+
+<p>One of the most important parts of our pipeline is the object detection model
+that produces bounding boxes for our further analysis.
+The Science Center plaza webcam has no labels, and it would be infeasible
+for us to provide ground truth labels for this dataset.
+Therefore, we used a pretrained model from the Microsoft COCO dataset.
+The Microsoft COCO dataset has labeled images of people, trucks, bicycles,
+cars, and many more relevant classes - however, the images are usually from
+a different perspective and very different distance.
+Therefore, we cannot use the reported mAP for these models, and will have
+to evaluate the performance of these models by eye.
+We looked at the archiectures:</p>
+
+<ul>
+  <li>Faster-RCNN</li>
+  <li>SSD</li>
+  <li>YOLO</li>
+</ul>
+
+<p>We also looked at the following pretty standard feature extractors:</p>
+
+<ul>
+  <li>Resnet-50</li>
+  <li>Resnet-101</li>
+  <li>Inception-V2</li>
+</ul>
+
+<p>We can evaluate these pretained models side by side.</p>
+
+<h3 id="comparisons-of-different-models">Comparisons of Different Models</h3>
+
+<p>There is a tradeoff between how long it takes for inference and the quality
+of the predictions.
+We evaluate the model’s performance during different times of the day.</p>
+
+<h4 id="daytime-not-crowded">Daytime, Not Crowded</h4>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/F08-z8duKIE" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+
+<h4 id="slightly-darker-not-crowded">Slightly Darker, Not Crowded</h4>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/ZR53NL4JOVU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+
+<h4 id="nighttime-around-8-pm">Nighttime, around 8 PM</h4>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/KnjFIt1sypg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+
+
+      
+      <div class="footer border-top border-gray-light mt-5 pt-3 text-right text-gray">
+        This site is open source. <a href="https://github.com/stephenslater/Crowd-Dynamics/edit/gh-pages/docs/tuning.md">Improve this page</a>.
+      </div>
+      
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.0/anchor.min.js" integrity="sha256-lZaRhKri35AyJSypXXs4o6OPFTbTmUoltBbDCbdzegg=" crossorigin="anonymous"></script>
+    <script>anchors.add();</script>
+    
+  </body>
+</html>

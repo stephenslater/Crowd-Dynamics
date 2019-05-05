@@ -1,4 +1,6 @@
-# Crowd Dynamics at Harvard University
+---
+title: Project Overview
+---
 
 ## Problem
 
@@ -51,8 +53,13 @@ TODO: Add S3 links to our data files.
 
 ## Visualizations
 
-Check out the visualizations
-[here!](visualizations.html).
+<!-- <div style="width:100%; background-color:red; height: 308px"> -->
+
+<iframe src="https://giphy.com/embed/cms6JM0agpP9HfWIEy" width="720" height="462" frameBorder="0" class="giphy-embed" style="display: block; margin-left: auto; margin-right: auto;width: 720px" allowFullScreen></iframe>
+
+<!-- </div> -->
+
+Check out more visualizations [here!](visualizations.html)
 Through the use of deep convolution neural networks and big data platforms
 such as Spark, we are able to quantify some of the patterns in the Science
 Center.
