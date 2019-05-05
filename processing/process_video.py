@@ -3,6 +3,7 @@ import tensorflow as tf
 import numpy as np
 from matplotlib import pyplot as plt
 import time
+import datetime
 import tqdm
 import numpy as np
 from pathlib import Path
@@ -47,16 +48,22 @@ def pred_from_frame(frames):
     return bboxes, scores, n, classes
 
 
-def process_video(video_path, batch_size=32, skip=10):
+def process_video(video_path, batch_size=32, rate=0.5):
+    split_name = os.path.splitext(os.path.basename(video_path))[0].split('-')
+    timestamp = '-'.join(split_name[:-1])
+    fps = int(split_name[-1])
+    skip = int(rate * fps)
+    initial = datetime.datetime.strptime(timestamp, '%Y%m%d-%H%M%S')
+        
     cap = cv2.VideoCapture(video_path)
-    all_scores, all_classes, all_n, all_bboxes = [], [], [], []
+    all_scores, all_classes, all_n, all_bboxes, timestamps  = [], [], [], [], []
     start_time = time.time()
     video_running = True
     processed = 0
     while video_running:
         frames = []
-        for _ in range(batch_size):
-            for _ in range(skip):
+        for _ in range(skip):
+            for _ in range(fps // 2):
                 ret, frame = cap.read()
                 if not ret:
                     print("Video finished")
@@ -65,7 +72,10 @@ def process_video(video_path, batch_size=32, skip=10):
             if not video_running:
                 break
             frames.append(frame)
+            timestamps.append(str(initial + datetime.timedelta(seconds=rate*processed)))
             processed += 1
+        if not frames:
+            break
         bboxes, scores, n, classes = pred_from_frame(frames)
         all_scores.append(scores)
         all_bboxes.append(bboxes)
@@ -79,13 +89,13 @@ def process_video(video_path, batch_size=32, skip=10):
     full_scores = np.row_stack(all_scores)
     full_classes = np.row_stack(all_classes)
     full_n = np.concatenate(all_n, axis=None)
-    return full_bboxes, full_scores, full_n, full_classes
+    return timestamps, full_bboxes, full_scores, full_n, full_classes
 
 def make_predictions(videoname):
     video = os.path.join(VIDEO_PATH, videoname)
     BATCH_SIZE = 72 
     start_time = time.time()
-    bboxes, scores, n, classes = process_video(video, batch_size=BATCH_SIZE)
+    timestamps, bboxes, scores, n, classes = process_video(video, batch_size=BATCH_SIZE)
     end_time = time.time()
     print('Elapsed: %f' % (end_time - start_time))
     
@@ -107,10 +117,11 @@ def make_predictions(videoname):
     # Save to Spark dataframe
     output_dir = os.path.join(OUTPUT_PATH, os.path.splitext(args.video)[0])
     spark = SparkSession.builder.getOrCreate()
-    schema = StructType([StructField('bboxes', ArrayType(DoubleType()), True),
+    schema = StructType([StructField('timestamp', StringType(), True),
+                         StructField('bboxes', ArrayType(DoubleType()), True),
                          StructField('scores', ArrayType(DoubleType()), True)])
-    df = spark.createDataFrame(list(zip(*(agg_bboxes, agg_scores))), schema)
-    df.write.mode('overwrite').json(output_dir)
+    df = spark.createDataFrame(list(zip(*(timestamps, agg_bboxes, agg_scores))), schema)
+    df.coalesce(1).write.mode('overwrite').json(output_dir)
     
     df1 = spark.read.json(output_dir)
     df1.show()
