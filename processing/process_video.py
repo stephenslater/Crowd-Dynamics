@@ -8,11 +8,13 @@ import numpy as np
 from pathlib import Path
 import argparse
 import cv2
-
+from pyspark.sql.types import *
+from pyspark.sql import SparkSession
 
 sess = tf.Session()
 graph = tf.get_default_graph()
 
+OUTPUT_PATH = os.path.join(os.environ['HOME'], "output")
 MODEL_PATH = os.path.join(os.environ['HOME'], "models")
 VIDEO_PATH = os.path.join(os.environ["HOME"], "videos")
 
@@ -69,22 +71,49 @@ def process_video(video_path, batch_size=32):
         all_classes.append(classes)
         if not video_running:
             break
-        if processed % (batch_size * 10) == 0:
-            print('Batches processed: %d' % processed)
+        print('Frames processed: %d' % processed)
     print("Total time: {} seconds".format(int(time.time() - start_time)))
     full_bboxes = np.row_stack(all_bboxes)
     full_scores = np.row_stack(all_scores)
     full_classes = np.row_stack(all_classes)
+    full_n = np.row_stack(np.expand_dims(all_n, 0))
     return full_bboxes, full_scores, full_n, full_classes
 
 def make_predictions(videoname):
     video = os.path.join(VIDEO_PATH, videoname)
-    BATCH_SIZE = 32 
+    BATCH_SIZE = 72 
     start_time = time.time()
-    bboxes, scores, classes = process_video(video, batch_size=BATCH_SIZE)
+    bboxes, scores, n, classes = process_video(video, batch_size=BATCH_SIZE)
     end_time = time.time()
     print('Elapsed: %f' % (end_time - start_time))
     
+    # some cleaning
+    n = n.flatten()
+    agg_bboxes = []
+    agg_scores = []
+    num_frames = len(bboxes) 
+    for ind in range(num_frames):
+        image_n = int(n[ind])
+        image_bboxes = bboxes[ind][:image_n]
+        image_scores = scores[ind][:image_n]
+        image_classes = classes[ind][:image_n]
+        indices = image_classes == 1.
+        image_bboxes = image_bboxes[indices]
+        image_scores = image_scores[indices]
+        agg_bboxes.append(image_bboxes.flatten().tolist())
+        agg_scores.append(image_scores.tolist())
+
+    # Save to Spark dataframe
+    output_dir = os.path.join(OUTPUT_PATH, os.path.splitext(args.video)[0])
+    spark = SparkSession.builder.getOrCreate()
+    schema = StructType([StructField('bboxes', ArrayType(DoubleType()), True),
+                         StructField('scores', ArrayType(DoubleType()), True)])
+    df = spark.createDataFrame(list(zip(*(agg_bboxes, agg_scores))), schema)
+    df.write.mode('overwrite').json(output_dir)
+    
+    df1 = spark.read.json(output_dir)
+    df1.show()
+ 
     # saving everything
     filename = '{}-{}'.format(os.path.splitext(videoname)[0], CV_MODEL)
     np.savez(filename, bboxes=bboxes, scores=scores, classes=classes,)
