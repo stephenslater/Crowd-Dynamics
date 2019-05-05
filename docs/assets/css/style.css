@@ -208,3 +208,9 @@ table td { border: 1px solid #e8e8e8; }
 .post-title { size: 32 !important; }
 
 .youtube { border: 1px solid dark-grey; display: block; margin-left: auto; margin-right: auto; width: 560; border: 1px solid gray; border-radius: 2px; }
+
+.h_logo{
+  height: 75px;
+  width: 273px;
+  margin: auto
+}
