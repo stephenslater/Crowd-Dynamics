@@ -204,8 +204,8 @@ table td { border: 1px solid #e8e8e8; }
 .site-title { color: black !important; }
 
 .site-header{
-  display: flex;
-  justify-content: space-around;
+  display: flex!important;
+  justify-content: space-around!important;
 }
 
 .page-link:hover { color: var(--primary); }
