@@ -55,7 +55,7 @@ def get_y(values):
 def fudf(val):
     return reduce(lambda x, y:x+y, val)
 
-def compute_velocities(cols, fps=2.0, threshold=0.3):
+def compute_velocities(cols, fps=2.0, threshold=0.3, return_assignments=False):
     # Assume frame_1 = [x_i, y_i, x_{i+1}, y_{i+1}, ...]
     f_1 = iter(cols[0])
     f_2 = iter(cols[1])
@@ -98,6 +98,9 @@ def compute_velocities(cols, fps=2.0, threshold=0.3):
             velocities[p[0]] = dist * fps
             targets[p[1]] = p[0]
 
+    if return_assignments:
+        assignments = [[v, k] for k, v in targets.items()]
+        return [float(v) for v in velocities.values()], assignments
     return [float(v) for v in velocities.values()]
 
 # DFS to find connected components, where edges connect i, j iff dist(i,j)<threshold 
@@ -179,10 +182,8 @@ df.show()
 - average velocity
 """
 
-# 0.7 frames/second => 210 frames for 300 seconds (5 minutes)
-# 2.4 frames/second => 720 frames for 300 seconds (5 minutes)
-seconds = window_minutes * 60
-agg_df = (df.groupBy(window("timestamp", windowDuration="{} seconds".format(seconds), slideDuration="{} seconds".format(seconds)))
+# seconds = window_minutes * 60
+agg_df = (df.groupBy(window("timestamp", windowDuration="{} minutes".format(seconds), slideDuration="{} minutes".format(seconds)))
            .agg(F.sum('num_people'),
                 F.sum('num_groups'),
                 F.sum('sum_velocities'),
