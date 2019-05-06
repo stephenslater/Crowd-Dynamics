@@ -24,7 +24,7 @@ fps = 2.
 spark = SparkSession.builder.getOrCreate()
 
 """# Load data"""
-directory = '20190506-083703-12'
+directory = 'full_paired'
 
 # Schema for JSON
 schema = StructType([StructField('bboxes', ArrayType(DoubleType()), True),
@@ -196,11 +196,9 @@ df = (df.withColumn('num_people', count_udf('scores'))
         .withColumn('y_centers', y_udf('centers'))
         .withColumn('group_sizes', group_udf('centers'))
         .withColumn('num_groups', count_udf('group_sizes'))
-       # .withColumn('next_frame_centers', lag("centers", -1).over(w_pair)).na.drop()
         .withColumn('velocities', velocity_udf('pair_centers'))
         .withColumn('num_velocities', count_udf('velocities'))
         .withColumn('sum_velocities', sum_udf('velocities')))
-df.show()
 
 """# Aggregate each 5 minute window to compute:
 - average number of people detected
@@ -208,7 +206,6 @@ df.show()
 - average velocity
 """
 
-# seconds = window_minutes * 60
 window_str = '{} minutes'.format(window_minutes)
 agg_df = (df.groupBy(window('timestamp', windowDuration=window_str, slideDuration=window_str))
            .agg(F.sum('num_people'),
@@ -225,5 +222,3 @@ agg_df = (df.groupBy(window('timestamp', windowDuration=window_str, slideDuratio
            .orderBy('window'))
 
 agg_df.show()
-pandas_df = agg_df.toPandas()
-pandas_df.to_csv('{}-{}mins.csv'.format(directory, window_minutes))
