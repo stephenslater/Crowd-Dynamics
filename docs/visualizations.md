@@ -35,8 +35,8 @@ We are able to see from the aggregated analytics when classes finish.
 
 ![classtimesthursday](images/classtimesthursday.png)
 
-If you want to explore a subset of the data yourself, check out this interactive
-graph.
+If you want to explore a subset of the data yourself, check out 
+[this interactive graph.](interactive.md)
 You can hover over the bars to see more information and zoom in.
 Not all of the data can be loaded because there is too much data and it lags
 out the webpage.
