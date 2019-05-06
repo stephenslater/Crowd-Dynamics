@@ -24,9 +24,9 @@ fps = 2.
 spark = SparkSession.builder.getOrCreate()
 
 """# Load data"""
-directory = 'secondtest'
+directory = 'folder'
 df = spark.read.json(directory)
-df.show()
+df = df.orderBy('timestamp').show()
 
 """# Functions used for UDFs (including velocity and group size)"""
 def count(column):
