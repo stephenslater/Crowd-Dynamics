@@ -113,21 +113,23 @@ def make_predictions(videoname):
         image_scores = image_scores[indices]
         agg_bboxes.append(image_bboxes.flatten().tolist())
         agg_scores.append(image_scores.tolist())
-
+    
+    num_detections = [float(len(x)) for x in agg_scores]
+    pair_bboxes = [[i] + j + k for i, j, k in zip(*(num_detections[:-1], agg_bboxes[:-1], agg_bboxes[1:]))]
+    agg_bboxes = agg_bboxes[:-1]
+    agg_scores = agg_scores[:-1]    
+    
     # Save to Spark dataframe
     output_dir = os.path.join(OUTPUT_PATH, os.path.splitext(args.video)[0])
     spark = SparkSession.builder.getOrCreate()
-    schema = StructType([StructField('timestamp', StringType(), True),
-                         StructField('bboxes', ArrayType(DoubleType()), True),
-                         StructField('scores', ArrayType(DoubleType()), True)])
-    df = spark.createDataFrame(list(zip(*(timestamps, agg_bboxes, agg_scores))), schema)
+    schema = StructType([StructField('bboxes', ArrayType(DoubleType()), True),
+                         StructField('scores', ArrayType(DoubleType()), True),
+                         StructField('timestamp', StringType(), True),
+                         StructField('pair_bboxes', ArrayType(DoubleType()), True)])
+    df = spark.createDataFrame(list(zip(*(agg_bboxes, agg_scores, timestamps, pair_bboxes))), schema)
     df.coalesce(1).write.mode('overwrite').json(output_dir)
     
     df1 = spark.read.json(output_dir)
-    df1.show()
- 
-    # saving everything
-#    filename = '{}-{}'.format(os.path.splitext(videoname)[0], CV_MODEL)
-#    np.savez(filename, bboxes=bboxes, scores=scores, classes=classes,)
+    df1.show() 
             
 make_predictions(args.video)
