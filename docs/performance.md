@@ -25,3 +25,8 @@ TODO: Talk about performance -->
 
 
 <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+
+Using AWS EMR cluster of 8 m4.xlarge workers with 4 cores each to compute historical analytics on the detected objects that we identified from 150 GB of video:
+
+![8nodes](images/8nodes.png)
+
