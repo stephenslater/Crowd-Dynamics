@@ -21,10 +21,11 @@ from pyspark.sql.window import Window
 window_minutes = 20 
 fps = 2.
 
-spark = SparkSession.builder.getOrCreate()
+# spark = SparkSession.builder.config('spark.dynamicAllocation.enabled', False).getOrCreate()
 
+spark = SparkSession.builder.getOrCreate()
 """# Load data"""
-directory = 'folder'
+directory = 'full'
 df = spark.read.json(directory)
 df = df.orderBy('timestamp')
 
@@ -149,9 +150,10 @@ def compute_groups(positions, threshold=0.1):
 
 count_udf = udf(count, IntegerType())
 sum_udf = udf(sum_vals, DoubleType())
-avg_udf = udf(lambda arr: avg_vals(arr), DoubleType())
+avg_udf = udf(avg_vals, DoubleType())
 center_udf = udf(get_center, ArrayType(FloatType()))
-velocity_udf = udf(lambda arr: compute_velocities(arr), ArrayType(DoubleType()))
+# velocity_udf = udf(compute_velocities, ArrayType(DoubleType()))
+velocity_udf = udf(lambda x: x[0] + x[1], ArrayType(DoubleType()))
 group_udf = udf(compute_groups, ArrayType(IntegerType()))
 x_udf = udf(get_x, ArrayType(DoubleType()))
 y_udf = udf(get_y, ArrayType(DoubleType()))
@@ -170,11 +172,10 @@ df = (df.withColumn('num_people', count_udf('scores'))
         .withColumn('group_sizes', group_udf('centers'))
         .withColumn('num_groups', count_udf('group_sizes'))
         .withColumn('next_frame_centers', lag("centers", -1).over(w_pair)).na.drop()
-        .withColumn('velocities', velocity_udf(struct('centers', 'next_frame_centers')))
-        .withColumn('num_velocities', count_udf('velocities'))
-        .withColumn('sum_velocities', sum_udf('velocities')))
-        
-df.show()
+        .withColumn('velocities', velocity_udf(struct('centers', 'next_frame_centers'))))
+#        .withColumn('num_velocities', count_udf('velocities'))
+#        .withColumn('sum_velocities', sum_udf('velocities')))
+df.show()    
 
 """# Aggregate each <window_minutes> window to compute:
 - average number of people detected
@@ -182,27 +183,28 @@ df.show()
 - average velocity
 """
 
-# seconds = window_minutes * 60
-window_str = '{} minutes'.format(window_minutes)
-agg_df = (df.groupBy(window('timestamp', windowDuration=window_str, slideDuration=window_str))
-           .agg(F.sum('num_people'),
-                F.sum('num_groups'),
-                F.sum('sum_velocities'),
-                F.sum('num_velocities'),
-                avg('num_people'),
-                collect_list('x_centers'),
-                collect_list('y_centers'))
-           .withColumn('avg_group_size', avg_udf(struct('sum(num_people)', 'sum(num_groups)')))
-           .withColumn('avg_velocity', avg_udf(struct('sum(sum_velocities)', 'sum(num_velocities)')))
-           .withColumnRenamed('avg(num_people)', 'avg_num_people')
-           .withColumn('x_centers', flattenUdf('collect_list(x_centers)'))
-           .withColumn('y_centers', flattenUdf('collect_list(y_centers)'))
-           .drop('collect_list(x_centers)')
-           .drop('collect_list(y_centers)')
-           .drop('sum(num_people)')
-           .drop('sum(num_groups)')
-           .drop('sum(sum_velocities)')
-           .drop('sum(num_velocities)')
-           .orderBy('window'))
+#seconds = window_minutes * 60
+#window_str = '{} minutes'.format(window_minutes)
+#agg_df = df.groupBy(window('timestamp', windowDuration=window_str, slideDuration=window_str)).agg({'num_people': 'sum', 'num_groups': 'sum', 
+#    'num_people': 'avg', 'x_centers': 'collect_list', 'y_centers' : 'collect_list'})
+#           .agg(F.sum('num_people')),
+#                F.sum('num_groups')),
+#                F.sum('sum_velocities'),
+#                F.sum('num_velocities'),
+#                avg('num_people'),
+#                collect_list('x_centers'),
+#                collect_list('y_centers'))
+#           .withColumn('avg_group_size', avg_udf(struct('sum(num_people)', 'sum(num_groups)')))
+#           .withColumn('avg_velocity', avg_udf(struct('sum(sum_velocities)', 'sum(num_velocities)')))
+#           .withColumnRenamed('avg(num_people)', 'avg_num_people')
+#           .withColumn('x_centers', flattenUdf('collect_list(x_centers)'))
+#           .withColumn('y_centers', flattenUdf('collect_list(y_centers)'))
+#           .drop('collect_list(x_centers)')
+#           .drop('collect_list(y_centers)')
+#           .drop('sum(num_people)')
+#           .drop('sum(num_groups)')
+#           .drop('sum(sum_velocities)')
+#           .drop('sum(num_velocities)')
+#           .orderBy('window'))
 
-agg_df.show()
+#agg_df.show()
