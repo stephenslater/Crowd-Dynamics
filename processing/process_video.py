@@ -48,11 +48,11 @@ def pred_from_frame(frames):
     return bboxes, scores, n, classes
 
 
-def process_video(video_path, batch_size=32, rate=0.5):
+def process_video(video_path, batch_size=32, rate=2):
     split_name = os.path.splitext(os.path.basename(video_path))[0].split('-')
     timestamp = '-'.join(split_name[:-1])
     fps = int(split_name[-1])
-    skip = int(rate * fps)
+    skip = int(fps // rate)
     initial = datetime.datetime.strptime(timestamp, '%Y%m%d-%H%M%S')
         
     cap = cv2.VideoCapture(video_path)
@@ -62,8 +62,8 @@ def process_video(video_path, batch_size=32, rate=0.5):
     processed = 0
     while video_running:
         frames = []
-        for _ in range(skip):
-            for _ in range(fps // 2):
+        for _ in range(batch_size):
+            for _ in range(skip):
                 ret, frame = cap.read()
                 if not ret:
                     print("Video finished")

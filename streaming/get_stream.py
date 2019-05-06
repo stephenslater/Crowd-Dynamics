@@ -24,7 +24,7 @@ if __name__ == "__main__":
     headers={"origin": "https://commonspaces.harvard.edu", "Referer" : "https://commonspaces.harvard.edu/plaza-webcam"}
     max = get_current()
     while True:
-        time.sleep(4)
+        time.sleep(5)
         url = "https://d144v3end3hovo.cloudfront.net/monitor/harvard-spaces/science-center-plaza.stream/media_w1332054195_" + str(curr_id) + ".ts"
         r = requests.get(url)
         if r.status_code != 404:

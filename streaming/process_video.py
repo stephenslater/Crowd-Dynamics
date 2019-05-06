@@ -12,14 +12,17 @@ import cv2
 from pyspark.sql.types import *
 from pyspark.sql import SparkSession
 
+os.environ['PYSPARK_PYTHON'] = '/usr/bin/python3'
+os.environ['PYSPARK_DRIVER_PYTHON'] = '/usr/bin/python3'
+
+
 spark = SparkSession.builder.getOrCreate()
 sess = tf.Session()
 graph = tf.get_default_graph()
 
-os.environ['PYSPARK_PYTHON'] = '/usr/bin/python3'
 MODEL_PATH = os.path.join(os.environ['HOME'], "models")
 VIDEO_PATH = os.path.join(os.environ['HOME'], "streaming-videos")
-OUTPUT_PATH = os.path.join(os.environ['HOME'], "streaming-output")
+OUTPUT_PATH = os.path.join(os.environ['HOME'], "streaming-dataframes")
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-m', '--model', required=True, dest='model', type=str,
@@ -48,11 +51,11 @@ def pred_from_frame(frames):
     return bboxes, scores, n, classes
 
 
-def process_video(video_path, batch_size=32, rate=0.5):
+def process_video(video_path, batch_size=32, rate=6):
     split_name = os.path.splitext(os.path.basename(video_path))[0].split('-')
     timestamp = '-'.join(split_name[:-1])
     fps = int(split_name[-1])
-    skip = int(rate * fps)
+    skip = int(fps // rate)
     initial = datetime.datetime.strptime(timestamp, '%Y%m%d-%H%M%S')
         
     cap = cv2.VideoCapture(video_path)
@@ -62,11 +65,10 @@ def process_video(video_path, batch_size=32, rate=0.5):
     processed = 0
     while video_running:
         frames = []
-        for _ in range(skip):
-            for _ in range(fps // 2):
+        for _ in range(batch_size):
+            for _ in range(skip):
                 ret, frame = cap.read()
                 if not ret:
-                    print("Video finished")
                     video_running = False
                     break 
             if not video_running:
@@ -84,7 +86,7 @@ def process_video(video_path, batch_size=32, rate=0.5):
         if not video_running:
             break
     print('Frames processed: %d' % processed)
-    print("Total time: {} seconds".format(int(time.time() - start_time)))
+    print("ML time: {} seconds".format(int(time.time() - start_time)))
     full_bboxes = np.row_stack(all_bboxes)
     full_scores = np.row_stack(all_scores)
     full_classes = np.row_stack(all_classes)
@@ -93,11 +95,10 @@ def process_video(video_path, batch_size=32, rate=0.5):
 
 def make_predictions(videoname):
     video = os.path.join(VIDEO_PATH, videoname)
-    BATCH_SIZE = 72 
+    BATCH_SIZE = 48
+    RATE = 6 
     start_time = time.time()
-    timestamps, bboxes, scores, n, classes = process_video(video, batch_size=BATCH_SIZE)
-    end_time = time.time()
-    print('Elapsed: %f' % (end_time - start_time))
+    timestamps, bboxes, scores, n, classes = process_video(video, batch_size=BATCH_SIZE, rate=RATE)
     
     # some cleaning
     agg_bboxes = []
@@ -120,13 +121,16 @@ def make_predictions(videoname):
     agg_scores = agg_scores[:-1]    
     
     # Save to Spark dataframe
-    output_dir = os.path.join(OUTPUT_PATH, os.path.splitext(videoname)[0])
+    output_dir = os.path.join(OUTPUT_PATH, os.path.splitext(videoname)[0] + '-%d' % RATE)
     schema = StructType([StructField('bboxes', ArrayType(DoubleType()), True),
                          StructField('scores', ArrayType(DoubleType()), True),
                          StructField('timestamp', StringType(), True),
                          StructField('pair_bboxes', ArrayType(DoubleType()), True)])
     df = spark.createDataFrame(list(zip(*(agg_bboxes, agg_scores, timestamps, pair_bboxes))), schema)
     df.coalesce(1).write.mode('overwrite').json(output_dir)
+
+    end_time = time.time()
+    print("Total time: {} seconds".format(time.time() - start_time))
     
 #    df1 = spark.read.json(output_dir)
 #    df1.show() 
@@ -136,5 +140,6 @@ while True:
     if not videos:
         time.sleep(1)
     for filename in videos:
+        print('Processing video %s' % filename)
         make_predictions(filename)
         os.remove(os.path.join(VIDEO_PATH, filename))	
