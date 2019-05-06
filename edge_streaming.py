@@ -66,12 +66,23 @@ while True:
     # Scale the bounding boxes to the image size.
     h, w, _ = image.shape
     bboxes *= np.array([h, w, h, w])
-    for bbox in bboxes:
-        y1, x1, y2, x2 = bbox
-        print('Using bbox', bbox)
-        print(x1, y1)
-        cv2.circle(display, (x1, y1), 5, (0,255,0), -1)
-
+    num_dets = len(bboxes)
+    if num_dets > 0:
+        centers_y = bboxes[:, [0, 2]].mean(axis=1)
+        centers_x = bboxes[:, [1, 3]].mean(axis=1)
+        for i in range(num_dets):
+            cx, cy = centers_x[i], centers_y[i]
+            color = (0, 255, 0) if classes[i] == 1 else (0, 0, 255)
+            cv2.circle(display, (cx, cy), 5, color, -1)
+    
+    msg = "Number of people: {}".format(num_dets)
+    vel_msg = "Average Velocity: {}"
+    font = cv2.FONT_HERSHEY_SIMPLEX
+    fontcolor = (0, 0, 0)
+    fontscale = 1
+    cv2.putText(display, msg, (10, 420), font, fontscale, fontcolor, 2, cv2.LINE_AA)
+    cv2.putText(display, vel_msg, (10, 380), font, fontscale, fontcolor, 2, cv2.LINE_AA)
+    
     cv2.imshow("Science Center Plaza Stream", display)
     print("fps: {}".format(1 / (time.time() - last_time)))
     
