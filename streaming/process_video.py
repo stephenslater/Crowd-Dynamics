@@ -11,10 +11,10 @@ import argparse
 import cv2
 from pyspark.sql.types import *
 from pyspark.sql import SparkSession
+import datetime
+import main_server
 
-sess = tf.Session()
-graph = tf.get_default_graph()
-
+os.environ['PYSPARK_PYTHON'] = '/usr/bin/python3'
 OUTPUT_PATH = os.path.join(os.environ['HOME'], "output")
 MODEL_PATH = os.path.join(os.environ['HOME'], "models")
 VIDEO_PATH = os.path.join(os.environ["HOME"], "videos")
@@ -28,23 +28,17 @@ args = parser.parse_args()
 
 
 CV_MODEL = args.model
-saver = tf.train.import_meta_graph(os.path.join(MODEL_PATH, CV_MODEL, 'model.ckpt.meta'))
-saver.restore(sess, tf.train.latest_checkpoint(os.path.join(MODEL_PATH, CV_MODEL)))
 
-input_tensor = graph.get_tensor_by_name('image_tensor:0')
-output_tensors = dict(
-    bboxes = graph.get_tensor_by_name('detection_boxes:0'),
-    classes = graph.get_tensor_by_name('detection_classes:0'),
-    n = graph.get_tensor_by_name('num_detections:0'),
-    scores = graph.get_tensor_by_name('detection_scores:0'),
-)
-
-def pred_from_frame(frames):
+def pred_from_frame(frame):
     """Takes a list of frames and runs it through our prediction"""
-    frame = np.stack(frames)
-    output = sess.run(output_tensors, 
-         feed_dict={input_tensor: frame})
-    bboxes, scores, n, classes = output['bboxes'], output['scores'], output['n'], output['classes']
+    #frame = np.stack(frames)
+    # output = sess.run(output_tensors, 
+    #     feed_dict={input_tensor: frame})
+    cv2.imwrite('out.png', frame)
+    print('respones', main_server.request_object_detection('out.png', 'object_1'))
+    exit(0)
+    classes, bboxes, scores = main_server.request_object_detection('out.png', 'object_1')
+    n = len(bboxes)
     return bboxes, scores, n, classes
 
 
@@ -60,31 +54,20 @@ def process_video(video_path, batch_size=32, rate=0.5):
     start_time = time.time()
     video_running = True
     processed = 0
+    print('raymond')
     while video_running:
-        frames = []
-        for _ in range(skip):
-            for _ in range(fps // 2):
-                ret, frame = cap.read()
-                if not ret:
-                    print("Video finished")
-                    video_running = False
-                    break 
-            if not video_running:
-                break
-            frames.append(frame)
-            timestamps.append(str(initial + datetime.timedelta(seconds=rate*processed)))
-            processed += 1
-        if not frames:
+        ret, frame = cap.read()
+        if frame is None:
+            print('There was no frames')
             break
-        bboxes, scores, n, classes = pred_from_frame(frames)
+        bboxes, scores, n, classes = pred_from_frame(frame)
         all_scores.append(scores)
         all_bboxes.append(bboxes)
         all_n.append(n)
         all_classes.append(classes)
-        if not video_running:
-            break
     print('Frames processed: %d' % processed)
     print("Total time: {} seconds".format(int(time.time() - start_time)))
+    print("scores", all_scores)
     full_bboxes = np.row_stack(all_bboxes)
     full_scores = np.row_stack(all_scores)
     full_classes = np.row_stack(all_classes)
