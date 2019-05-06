@@ -3,41 +3,34 @@ import time
 from boto import kinesis
 import json
 import datetime
+import os
+import argparse
+
+VIDEO_PATH = os.path.join(os.environ["HOME"], "streaming-videos")
+
 
 def get_current():
     start = "https://d144v3end3hovo.cloudfront.net/monitor/harvard-spaces/science-center-plaza.stream/chunklist_w1332054195.m3u8"
     r = requests.get(start)
-    c = r.content
-    id = (c.split('EXT-X-MEDIA-SEQUENCE:')[1]).split('#')[0]
-    id = int(id)
-    id = id - 1
-    return id
+    c = r.content.decode(encoding='utf-8')
+    curr_id = (c.split('EXT-X-MEDIA-SEQUENCE:')[1]).split('#')[0]
+    return int(curr_id) - 1
 
 if __name__ == "__main__":
     start = "https://d144v3end3hovo.cloudfront.net/monitor/harvard-spaces/science-center-plaza.stream/chunklist_w1332054195.m3u8"
 
-    id = get_current() 
-    #print(r.content)
+    curr_id = get_current() 
     
-
     headers={"origin": "https://commonspaces.harvard.edu", "Referer" : "https://commonspaces.harvard.edu/plaza-webcam"}
-    # print(id)
     max = get_current()
     while True:
-        time.sleep(2)
-        # print(id)
-        url = "https://d144v3end3hovo.cloudfront.net/monitor/harvard-spaces/science-center-plaza.stream/media_w1332054195_" + str(id) + ".ts"
-        # url = "https://d144v3end3hovo.cloudfront.net/monitor/harvard-spaces/science-center-plaza.stream/media_w1332054195_108653.ts"
-        # print(url)
+        time.sleep(4)
+        url = "https://d144v3end3hovo.cloudfront.net/monitor/harvard-spaces/science-center-plaza.stream/media_w1332054195_" + str(curr_id) + ".ts"
         r = requests.get(url)
-        # if r.status_code == 404:
-        #     # print("hello")
         if r.status_code != 404:
-            with open("/home/reddi-rtx/videos/"+str(datetime.datetime.now().strftime('%Y%m%d-%H%M%S'))+'-12'+".ts", 'w') as textfile:
+            video_file = os.path.join(VIDEO_PATH, str(datetime.datetime.now().strftime('%Y%m%d-%H%M%S'))+'-12'+".ts")
+            with open(video_file, 'wb') as textfile:
                 textfile.write(r.content)
-            id = id + 1
-        print(id)
-        # print(r.status_code)
+            curr_id += 1
+        print(curr_id, r.status_code)
 
-# https://d144v3end3hovo.cloudfront.net/monitor/harvard-spaces/science-center-plaza.stream/media_w1332054195_108635.ts
-# https://d144v3end3hovo.cloudfront.net/monitor/harvard-spaces/science-center-plaza.stream/media_w1332054195_108624.ts

@@ -120,7 +120,7 @@ def make_predictions(videoname):
     agg_scores = agg_scores[:-1]    
     
     # Save to Spark dataframe
-    output_dir = os.path.join(OUTPUT_PATH, os.path.splitext(args.video)[0])
+    output_dir = os.path.join(OUTPUT_PATH, os.path.splitext(videoname)[0])
     spark = SparkSession.builder.getOrCreate()
     schema = StructType([StructField('bboxes', ArrayType(DoubleType()), True),
                          StructField('scores', ArrayType(DoubleType()), True),
