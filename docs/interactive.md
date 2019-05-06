@@ -2,6 +2,8 @@
 
 Here are some of the interactive analytics.
 Please be patient - the plots take a while to load since there is a lot of data.
+You can also click the tools on the right of the graph to use the mouse
+to drag, zoom in, and inspect the records.
 
 <iframe src="interactivenumpeoplegraph.html"
         sandbox="allow-same-origin allow-scripts"
