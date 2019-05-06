@@ -176,7 +176,7 @@ df = (df.withColumn('num_people', count_udf('scores'))
         
 df.show()
 
-"""# Aggregate each 5 minute window to compute:
+"""# Aggregate each <window_minutes> window to compute:
 - average number of people detected
 - average group size
 - average velocity
@@ -206,5 +206,3 @@ agg_df = (df.groupBy(window('timestamp', windowDuration=window_str, slideDuratio
            .orderBy('window'))
 
 agg_df.show()
-pandas_df = agg_df.toPandas()
-pandas_df.to_csv('{}-{}mins.csv'.format(directory, window_minutes))
