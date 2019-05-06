@@ -2,6 +2,7 @@ import requests
 import time
 from boto import kinesis
 import json
+import datetime
 
 def get_current():
     start = "https://d144v3end3hovo.cloudfront.net/monitor/harvard-spaces/science-center-plaza.stream/chunklist_w1332054195.m3u8"
@@ -13,7 +14,6 @@ def get_current():
     return id
 
 if __name__ == "__main__":
-    kinesis = kinesis.connect_to_region("us-east-1")
     start = "https://d144v3end3hovo.cloudfront.net/monitor/harvard-spaces/science-center-plaza.stream/chunklist_w1332054195.m3u8"
 
     id = get_current() 
@@ -30,12 +30,10 @@ if __name__ == "__main__":
         # url = "https://d144v3end3hovo.cloudfront.net/monitor/harvard-spaces/science-center-plaza.stream/media_w1332054195_108653.ts"
         # print(url)
         r = requests.get(url)
-        print(r.content)
         # if r.status_code == 404:
         #     # print("hello")
         if r.status_code != 404:
-            kinesis.put_record("CS205", r.content, "partitionkey")
-            with open('videos/movie' + str(id) + ".ts", 'w') as textfile:
+            with open("/home/reddi-rtx/videos/"+str(datetime.datetime.now().strftime('%Y%m%d-%H%M%S'))+'-12'+".ts", 'w') as textfile:
                 textfile.write(r.content)
             id = id + 1
         print(id)
