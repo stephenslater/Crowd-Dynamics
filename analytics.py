@@ -18,7 +18,7 @@ from pyspark.sql.types import DoubleType, IntegerType, StringType, ArrayType, Lo
 from pyspark.sql.window import Window
 
 # Window size
-window_minutes = 20. 
+window_minutes = 20 
 fps = 2.
 
 spark = SparkSession.builder.getOrCreate()
@@ -36,7 +36,7 @@ def sum_vals(column):
     return float(sum(column))
   
 def avg_vals(columns):
-    return float(columns[0] / columns[1]) if columns[1] else 0.0
+    return float(columns[0]) / columns[1] if columns[1] else 0.0
   
 def get_center(values):
     res = []
@@ -173,7 +173,6 @@ df = (df.withColumn('num_people', count_udf('scores'))
         .withColumn('velocities', velocity_udf(struct('centers', 'next_frame_centers')))
         .withColumn('num_velocities', count_udf('velocities'))
         .withColumn('sum_velocities', sum_udf('velocities')))
-        
 df.show()
 
 """# Aggregate each <window_minutes> window to compute:
@@ -182,7 +181,6 @@ df.show()
 - average velocity
 """
 
-# seconds = window_minutes * 60
 window_str = '{} minutes'.format(window_minutes)
 agg_df = (df.groupBy(window('timestamp', windowDuration=window_str, slideDuration=window_str))
            .agg(F.sum('num_people'),
