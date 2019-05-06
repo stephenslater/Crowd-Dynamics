@@ -2,7 +2,7 @@
 title: Performance
 ---
 
-## Theoretical Speedup
+<!-- ## Theoretical Speedup
 
 We use Gustafson's Law to calculate speedup: 
 
@@ -18,6 +18,10 @@ Running 8 p2.xlarge instances as worker nodes gives $$p=8$$. We can then calcula
 
 </ol>
 
-TODO: Talk about performance
+TODO: Talk about performance -->
+
+<img src="{{ "images/plots1.png" | relative_url}}" >
+<img src="{{ "images/plots2.png" | relative_url}}" >
+
 
 <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>

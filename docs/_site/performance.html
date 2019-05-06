@@ -40,13 +40,13 @@
   </header>
 
   <div class="post-content">
-    <h2 id="theoretical-speedup">Theoretical Speedup</h2>
+    <!-- ## Theoretical Speedup
 
-<p>We use Gustafson’s Law to calculate speedup:</p>
+We use Gustafson's Law to calculate speedup: 
 
-<script type="math/tex; mode=display">S=p+(1-p)s</script>
+$$S=p+(1-p)s$$
 
-<p>Running 8 p2.xlarge instances as worker nodes gives <script type="math/tex">p=8</script>. We can then calculate the speedup for the two steps of our calculations.</p>
+Running 8 p2.xlarge instances as worker nodes gives $$p=8$$. We can then calculate the speedup for the two steps of our calculations.
 
 <ol>
     <li>Create bounding boxes with NNs (fully parallelizable, store boxes in s3)</li>
@@ -56,7 +56,10 @@
 
 </ol>
 
-<p>TODO: Talk about performance</p>
+TODO: Talk about performance -->
+
+<p><img src="/images/plots1.png" />
+<img src="/images/plots2.png" /></p>
 
 <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
 
