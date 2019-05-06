@@ -4,7 +4,7 @@ Here are some of the interactive analytics.
 
 <iframe src="interactivenumpeoplegraph.html"
         sandbox="allow-same-origin allow-scripts"
-        width="500"
+        width="900"
         height="550"
         scrolling="no"
         seamless="seamless"
