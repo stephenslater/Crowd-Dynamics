@@ -114,8 +114,10 @@ if __name__ == '__main__':
     thresholds = THRESHOLD * history
     alert_msg = ['Average group size is high!', 'Average velocity is high!',
                  'Number of people is high!']
-    alert_color = (255, 0, 0)
-    height = [12, 52, 92]
+    alert_color = (0, 0, 255)
+    start_height = 30
+    diff = 30
+    height = [start_height + i * diff for i in range(3)]
 
     parser = argparse.ArgumentParser()
     parser.add_argument('-m', '--model', dest='model', type=str,
@@ -207,11 +209,14 @@ if __name__ == '__main__':
         # alerts = stats >= thresholds[hour]
         alerts = [True, True, True] # Testing
         
-        for i, alert in enumerate(alerts):
-            if alert:
-                cv2.putText(display, alert_msg[i], (10, height[i]), font, fontscale, alert_color, 
-                            2, cv2.LINE_AA)
-                print ("\n*\n*\n*\n*\n*ALERT! {}: {}\n*\n*\n*\n*\n*".format(alert_msg, stats[i]))
+        if np.any(alerts):
+            print ("\n*\n*\n*\n*\n*ALERT!")
+            for i, alert in enumerate(alerts):
+                if alert:
+                    cv2.putText(display, alert_msg[i], (10, height[i]), font, fontscale, alert_color, 
+                                2, cv2.LINE_AA)
+                print ("{}: {}".format(alert_msg, stats[i]))
+            print ("\n*\n*\n*\n*\n*")
         
         cv2.imshow("Science Center Plaza Stream", display)
         print("fps: {}".format(1 / (time.time() - last_time)))
