@@ -106,6 +106,11 @@ if __name__ == '__main__':
 
     MODEL_PATH = os.path.join(os.environ['HOME'], "models")
     
+    # Constants for displaying frame metrics
+    font = cv2.FONT_HERSHEY_SIMPLEX
+    fontcolor = (0, 0, 0)
+    fontscale = 1
+
     # Alert if frame metric exceeds (THRESHOLD * historical average)
     # Columns of history are: [avg group size, avg velocity, avg num people]
     # Rows are 0, ..., 23 for the start of each of the 24 hours per day
@@ -140,13 +145,15 @@ if __name__ == '__main__':
 
     SCALING = 1.2
     monitor = {'top': 160,
-            'left': 160,
-            'width': int(640 * SCALING),
-            'height': int(360 * SCALING)}
+               'left': 160,
+               'width': int(640 * SCALING),
+               'height': int(360 * SCALING)}
     sct = mss.mss()
     prev_centers = None
     while True:
         last_time = time.time()
+        print ("time is {}".format(last_time))
+        print ("Type: {}".format(type))
         grabbed_image = sct.grab(monitor)
         image = np.array(grabbed_image)
         # Need to convert BGRA to BGR
@@ -199,26 +206,21 @@ if __name__ == '__main__':
         msg = "Number of people: {}".format(num_dets)
         vel_msg = "Average velocity: {}".format(avg_velocity)
         gp_msg = "Average group size: {}".format(avg_group_size)
-        font = cv2.FONT_HERSHEY_SIMPLEX
-        fontcolor = (0, 0, 0)
-        fontscale = 1
         cv2.putText(display, msg, (10, 420), font, fontscale, fontcolor, 2, cv2.LINE_AA)
         cv2.putText(display, vel_msg, (10, 380), font, fontscale, fontcolor, 2, cv2.LINE_AA)
         cv2.putText(display, gp_msg, (10, 340), font, fontscale, fontcolor, 2, cv2.LINE_AA)
  
         # Compare current frame to historical average for corresponding hour
-        stats = np.array([avg_group_size, avg_velocity, num_dets])
-        # alerts = stats >= thresholds[hour]
-        alerts = [True, True, True] # Testing
-        
-        if np.any(alerts):
-            print ("\n*\n*\n*\n*\n*ALERT!")
-            for i, alert in enumerate(alerts):
-                if alert:
-                    cv2.putText(display, alert_msg[i], (10, height[i]), font, fontscale, alert_color, 
-                                2, cv2.LINE_AA)
-                print ("{}: {}".format(alert_msg[i], stats[i]))
-            print ("\n*\n*\n*\n*\n*")
+        # stats = np.array([avg_group_size, avg_velocity, num_dets])
+        # alerts = stats >= thresholds[hour]        
+        # if np.any(alerts):
+        #     print ("\n*\n*\n*\n*\n*ALERT!")
+        #     for i, alert in enumerate(alerts):
+        #         if alert:
+        #             cv2.putText(display, alert_msg[i], (10, height[i]), font, fontscale, alert_color, 
+        #                         2, cv2.LINE_AA)
+        #         print ("{}: {}".format(alert_msg[i], stats[i]))
+        #     print ("\n*\n*\n*\n*\n*")
         
         cv2.imshow("Science Center Plaza Stream", display)
         print("fps: {}".format(1 / (time.time() - last_time)))
