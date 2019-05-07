@@ -204,10 +204,26 @@ table td { border: 1px solid #e8e8e8; }
 .site-title { color: black !important; }
 
 .site-header{
-  display: flex!important;
-  justify-content: space-around!important;
-  background-color: gray;
+  display: flex;
+  justify-content: space-around;
+  background-color: #d6d6d6;
   border-bottom: 1px solid darkgray;  
+}
+
+@media screen and (max-width: 1200px){
+  
+  .h_logo{
+    
+    display: none;
+    
+    }
+}
+
+@media screen and (max-width: 600px){
+    .site-nav {
+        position: relative;
+        margin-bottom: 20px;
+    }
 }
 
 .page-link:hover { color: var(--primary); }
