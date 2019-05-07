@@ -1,4 +1,4 @@
-# Crowd Dynamics at Harvard University
+# Real-Time Crowd Dynamics
 
 Repository for CS 205 Final Project, Spring 2019
 
@@ -9,7 +9,7 @@ and tourists. The Science Center Plaza also has a live stream video feed 24
 hours per day, which you can check out
 [here](https://commonspaces.harvard.edu/plaza-webcam).
 However, can we use this data to make decisions, such as when to schedule
-events in the plaza? However, we only have a large amount of raw video data,
+events in the plaza?
 
 Our project provides real-time crowd analytics with object detection of people
 and average interframe and intraframe metrics, such as number of people, group
@@ -37,18 +37,30 @@ to 1 `p3.8xlarge` instances.
 We were still able to take advantage of GPU parallelism using `p3.8xlarge`
 instance, which has 4 NVIDIA V100 GPUs.
 
-To replicate the results, download a video from our S3 bucket with video
-data and run
+To replicate the results, first download a model. In our case, since we used Faster-RCNN with ResNet-101, we
+run
 
-TODO: Have RLIN make 
-
-```bash
-python run_ml.py
+```
+wget http://download.tensorflow.org/models/object_detection/faster_rcnn_resnet101_coco_2018_01_28.tar.gz
+tar -xvf faster_rcnn_resnet101_coco_2018_01_28.tar.gz ~/models
 ```
 
-Then, the output data
+The video files fed in must have file name
+`YYYYMMDD-HHMMSS-F.mkv` where `YYYY` is the year, `MM` is the month, `DD` is the day, `HH` is the hour, 
+`MM` is the minute, `SS` is the second, and `F` is the frame rate rounded to the nearest frame. An
+example would be `20190401-010203-12.mkv`.
 
-TODO: List where the output data gets sent to
+Once we have some of these videos, we can run
+
+```bash
+python process_video.py -m [MODEL] -i [VIDEO]
+```
+
+where `[MODEL]` is the model we want to use and `[VIDEO]` is the video we want to run the model on.
+The model must be in the directory `~/models` and the video must be in the directory `~/videos`.
+If the video name is `[FILE].mkv`, the script will save an output dataframe with name `[FILE]` to 
+directory `~/output`.
+
 
 ### Crowd Analytics
 
