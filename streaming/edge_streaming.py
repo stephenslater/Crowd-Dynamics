@@ -163,7 +163,9 @@ if __name__ == '__main__':
         if prev_centers:
             velocity = compute_velocities(prev_centers, centers)
             avg_velocity = compute_avg(velocity)
+        prev_centers = centers
         
+        # Compare to history
 
 
         # Make a copy of the image for displaying.
