@@ -15,7 +15,9 @@ For example, here is a bar chart for the average number of people in the plaza,
 while aggregating with a window of 20 minutes for Thursday, April 11.
 We are able to see from the aggregated analytics when classes finish.
 
-![classtimesthursday](images/classtimesthursday.png)
+<p align="center"> 
+<img src="images/classtimesthursday.png">
+</p>
 
 If you want to explore a subset of the data yourself,
 check out this interactive graph.
