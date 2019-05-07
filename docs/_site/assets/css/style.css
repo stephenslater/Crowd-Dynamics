@@ -207,7 +207,7 @@ table td { border: 1px solid #e8e8e8; }
 
 .site-title { text-align: center; width: 100%; font-weight: 600; font-size: 40px; padding-top: 10px; }
 
-.site-header { display: flex; justify-content: space-around; background-color: gray; border-bottom: 1px solid darkgray; }
+.site-header { display: flex; justify-content: space-around; background-color: #d6d6d6; border-bottom: 1px solid darkgray; }
 
 .site-nav { width: 100%; text-align: center; }
 
