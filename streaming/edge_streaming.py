@@ -209,7 +209,7 @@ if __name__ == '__main__':
         
         for i, alert in enumerate(alerts):
             if alert:
-                cv2.putText(display, alert_msg[i], (10, height[i]), font, fontscale, alertcolor, 
+                cv2.putText(display, alert_msg[i], (10, height[i]), font, fontscale, alert_color, 
                             2, cv2.LINE_AA)
                 print ("\n*\n*\n*\n*\n*ALERT! {}: {}\n*\n*\n*\n*\n*".format(alert_msg, stats[i]))
         
