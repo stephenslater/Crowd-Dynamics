@@ -95,3 +95,15 @@ feed into our visualization code.
 ```bash
 spark-submit heatmap.py
 ```
+
+The `heatmap.py` file should be available in the `spark/` directory of our
+repository.
+The code used for determining the speedup can also be found there.
+Once `heatmap.py` has been run, it should output a `.csv` with all of the
+aggregated statistic for our video data, such as:
+
+* Average Group Size
+* Average Velocity
+* Location of people within a supplied time window
+* Average Number of people in a time window
+* etc.
