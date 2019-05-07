@@ -211,7 +211,7 @@ if __name__ == '__main__':
         cv2.putText(display, gp_msg, (10, 340), font, fontscale, fontcolor, 2, cv2.LINE_AA)
  
         # Compare current frame to historical average for corresponding hour
-        stats = np.array([avg_group_size, avg_velocity, num_dets])
+        stats = np.array([avg_group_size, avg_velocity or 0.0, num_dets])
         alerts = stats >= thresholds[hour]        
         if np.any(alerts):
             print ("\n*\n*\n*\n*\n*ALERT!")
