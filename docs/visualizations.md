@@ -16,7 +16,7 @@ while aggregating with a window of 20 minutes for Thursday, April 11.
 We are able to see from the aggregated analytics when classes finish.
 
 <p align="center"> 
-<img src="images/classtimesthursday.png">
+<img src="images/classtimes2.png">
 </p>
 
 If you want to explore a subset of the data yourself,
