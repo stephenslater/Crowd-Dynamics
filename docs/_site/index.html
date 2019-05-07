@@ -40,7 +40,7 @@ and tourists. The Science Center Plaza also has a live stream video feed 24
 hours per day, which you can check out
 <a href="https://commonspaces.harvard.edu/plaza-webcam">here</a>.
 However, can we use this data to make decisions, such as when to schedule
-events in the plaza? However, we only have a large amount of raw video data,</p>
+events in the plaza?</p>
 
 <p>Our project provides real-time crowd analytics with object detection of people
 and average interframe and intraframe metrics, such as number of people, group
@@ -50,37 +50,40 @@ current analytics to the historical data for the corresponding time period in
 order to detect interesting events such as large groups of people or fast
 movement.</p>
 
-<h2 id="why-big-data">Why Big Data?</h2>
+<h2 id="big-data-and-big-compute">Big Data and Big Compute</h2>
 
 <p>This problem requires the use of multiple frameworks:</p>
 
 <ul>
   <li><strong>Big Data:</strong> because we process 150 GB of low-resolution historical video.</li>
-  <li><strong>HPC:</strong>: handling the throughput for streaming analytics of real-time science
+  <li><strong>Big Compute/HPC:</strong> handling the throughput for streaming analytics of real-time science
 center plaza video feed</li>
 </ul>
 
-<h2 id="infrastructures-and-methodologies">Infrastructures and Methodologies</h2>
+<p>With the Big Data part of our solution, we have fine-grained data parallelism and a SPMD execution model,
+while with the Big Compute component, we have coarse-grained data and functional parallelism and a DAT
+execution model.</p>
 
-<p>Our solution uses a pre-trained neural network (Faster R-CNN) across 8 GPUs to
-identify bounding boxes of people, and then 32 CPU cores to compute the
-analytics. For infrastructure, we use AWS EMR, Databricks on Spark ML to run
-our TensorFlow model, and Spark Streaming for real-time analytics.</p>
+<h2 id="data-software-and-infrastructure">Data, Software, and Infrastructure</h2>
 
-<h2 id="the-technical-stuff">The Technical Stuff</h2>
+<p>We continuously collected from the Science Center Plaza Webcam over the course of multiple weeks.</p>
 
-<p>We used a deep convolutional neural net using the Faster-RCNN architecture [1]
-for detecting people, bicycles, cars, and trucks.
-We used a pretrained model that was trained on Microsoft COCO [2], a dataset of
-common objects in context.
-The dataset is composed of a large number of images with a total of 91 unique
-objects with labels; however, we only care detecting pedestrians, so we only
-focus on detecting one class (person).</p>
+<p>The basic outline of our solutions is as follows. We begin by feeding our data through an object detection
+model to obtain bounding boxes identifying person locations. We then compute analytics such as number of
+people, velocities, gorup sizes, and locations based on bounding boxes. For historical analysis, we then
+perform some aggregation of these statistics over short periods of time. For streaming, we just directly work
+with the output analytics. After analytics computation is complete, we feed the results into a variety of visualizations.</p>
+
+<p>We use AWS EC2 GPU instances to run object detection, and Spark on AWS EMR to perform analytics computation.</p>
+
+<p>See the <a href="implementation.html">implementation page</a> for more details on our software and infrastructure.</p>
 
 <h2 id="code-and-data">Code and Data</h2>
 
 <p>Our code can be found on Github
 <a href="http://www.github.com/stephenslater/crowd-dynamics">here</a>.</p>
+
+<p>Our data can be found on S3</p>
 
 <p>TODO: Add S3 links to our data files.</p>
 
@@ -105,17 +108,6 @@ In the data, we are able to see:</p>
     <li>How long people stay in the science center plaza to eat.</li>
     <li>and many more!</li>
 </ul>
-
-<h2 id="citations">Citations</h2>
-
-<ol>
-  <li>
-    <p>Ren, Shaoqing et al. “Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks.” IEEE Transactions on Pattern Analysis and Machine Intelligence 39.6 (2017): 1137–1149. Crossref. Web.</p>
-  </li>
-  <li>
-    <p>Lin, Tsung-Yi et al. “Microsoft COCO: Common Objects in Context.” Lecture Notes in Computer Science (2014): 740–755. Crossref. Web.</p>
-  </li>
-</ol>
 </div>
 
       </div>
