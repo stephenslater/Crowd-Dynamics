@@ -48,19 +48,19 @@ over the individual bars.
 
 How does the distribution of people in the plaza change over time?
 Check out the heatmap of where people are standing in the image here.
+This is just the how the distribution of people in the plaza evolves
+over the day.
+The specific day depicted in the video was April 10, 2019.
 
-<link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-0.12.3.min.css" type="text/css" />
-        
-<script type="text/javascript" src="https://cdn.pydata.org/bokeh/release/bokeh-0.12.3.min.js"></script>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/8BY4yn1dLps" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-<iframe src="locations.html"
-        sandbox="allow-same-origin allow-scripts"
-        width="500"
-        height="550"
-        scrolling="no"
-        seamless="seamless"
-        frameborder="0" style="display: block; margin-left: auto; margin-right: auto; width: 500">
-</iframe>
+We see that in the mornings, the distirbution is relatively uniform along
+the plaza, and occupy where the food trucks are (since the food trucks
+don't come until noon).
+Then, we can see the different paths through the plaza light up as
+students try to get to class, and also the paths taken by tourists.
+We also see hotspots at the food trucks around 1 PM, from people eating
+lunch.
 
 ## Looking at the Detections
 
