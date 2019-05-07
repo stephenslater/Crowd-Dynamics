@@ -1,11 +1,13 @@
-"""Bench Pressing with Spark"""
+"""Benchmarking and evaluating the speedup for our historical analytics. We
+scan through up to 4 cores and 8 executors, since we used an EMR cluster with
+8 m4.xlarge workers (and each m4.xlarge worker has 4 vCPUs). However, this
+could be changed depending on the infrastructure you run it on."""
 import sys
 import os
 import subprocess
 import time
 import pickle
 from subprocess import DEVNULL, STDOUT
-
 
 SPARK = "spark-submit"
 FILE = "bench_spark.py"
@@ -33,6 +35,7 @@ for cores in range(1, 5):
 
 print(cores2runtime)
 
-with open("testdayscan.pkl", "wb") as f:
+# Write the results to a file to load later.
+with open("spark_analytics_benchmark.pkl", "wb") as f:
     pickle.dump(cores2runtime, f)
     

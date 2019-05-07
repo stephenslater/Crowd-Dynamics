@@ -15,7 +15,9 @@ For example, here is a bar chart for the average number of people in the plaza,
 while aggregating with a window of 20 minutes for Thursday, April 11.
 We are able to see from the aggregated analytics when classes finish.
 
-![classtimesthursday](images/classtimesthursday.png)
+<p align="center"> 
+<img src="images/classtimesthursday.png">
+</p>
 
 If you want to explore a subset of the data yourself,
 check out this interactive graph.
@@ -27,8 +29,9 @@ over the individual bars.
 
 <iframe src="interactive_analytics_graph.html"
         sandbox="allow-same-origin allow-scripts"
-        width="700"
-        height="480"
+        width="750"
+        height="500"
+        align="center"
         scrolling="no"
         seamless="seamless"
         frameborder="0" style="display: block; margin-left: auto; margin-right: auto; width: 500">
@@ -48,12 +51,9 @@ In particular, we compute the Euclidean distance between the centers (where the 
 
 Here is an example image, where the first frame (A) has 6 detected people, and the second frame (B) has 3 detected people. The green lines denote the link, and the velocity is computed as the length of the green line times the fps.
 
-![linking](images/linking.png)
 <p align="center"> 
-
 <img src="images/linking.png">
 </p>
-
 
 ## Hotspots
 
@@ -63,7 +63,11 @@ This is just the how the distribution of people in the plaza evolves
 over the day.
 The specific day depicted in the video was April 10, 2019.
 
-<iframe width="640" height="480" src="https://www.youtube.com/embed/JhHHnR9V0NI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="youtube"></iframe>
+<iframe width="640" height="360" src="https://www.youtube.com/embed/JhHHnR9V0NI"
+        frameborder="0"
+        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen
+        class="youtube"
+        style="padding:20px;"></iframe>
 
 We see that in the mornings, the distirbution is relatively uniform along
 the plaza, and occupy where the food trucks are (since the food trucks
@@ -79,4 +83,7 @@ It's also nice to be able to look at the detections themselves.
 We are able to get the detections and plot different classes to check if the
 detections are reasonable.
 
-<iframe width="640" height="480" src="https://www.youtube.com/embed/eN9tTVJ9J2c" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="youtube"></iframe>
+<iframe width="640" height="360" src="https://www.youtube.com/embed/eN9tTVJ9J2c"
+        frameborder="0"
+        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="youtube"
+        style="padding:20px;"></iframe>
