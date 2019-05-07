@@ -206,6 +206,8 @@ table td { border: 1px solid #e8e8e8; }
 .site-header{
   display: flex!important;
   justify-content: space-around!important;
+  background-color: gray;
+  border-bottom: 1px solid darkgray;  
 }
 
 .page-link:hover { color: var(--primary); }

@@ -16,7 +16,7 @@
 {"url":"http://localhost:4000/implementation.html","headline":"Implementation","description":"Repository for CS 205 Final Project, Spring 2019","@type":"WebPage","@context":"http://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Crowd Dynamics at Harvard University" /></head><body><header class="site-header" style="display: flex">
-        <img class="h_logo" src="/images/seas.jpg" >
+        <img class="h_logo" src="/images/seas.png" >
     <div class="wrapper"><a class="site-title" rel="author" href="/">Crowd Dynamics at Harvard University</a><nav class="site-nav">
           <input type="checkbox" id="nav-trigger" class="nav-trigger" />
           <label for="nav-trigger">
@@ -27,7 +27,7 @@
             </span>
           </label>
   
-          <div class="trigger"><a class="page-link" href="/">Project Overview</a><a class="page-link" href="/implementation.html">Implementation</a><a class="page-link" href="/requirements.html">Requirements</a><a class="page-link" href="/tuning.html">Tuning</a><a class="page-link" href="/performance.html">Performance</a><a class="page-link" href="/visualizations.html">Visualizations</a></div>
+          <div class="trigger"><a class="page-link" href="/">Overview</a><a class="page-link" href="/implementation.html">Implementation</a><a class="page-link" href="/requirements.html">Requirements</a><a class="page-link" href="/tuning.html">Tuning</a><a class="page-link" href="/performance.html">Performance</a><a class="page-link" href="/visualizations.html">Visualizations</a></div>
         </nav></div>
         <img class="h_logo" src="/images/iacs.png" >
   </header>
@@ -53,26 +53,22 @@ Our pipeline looks like this:</p>
 
 <p>Our project can be split up into multiple stages.</p>
 
-<h3 id="video-processing">Video Processing</h3>
+<h3 id="video-processing-and-object-detection">Video Processing and Object Detection</h3>
 
-<p>First, we process the historical video records of the Science Center Plaza.
-We used 144 cores to turn the historical video into individual frames,
-encoded losslessly as <code class="highlighter-rouge">.png</code> files.
-These individual <code class="highlighter-rouge">.png</code> frames are then stored into the AWS EMRFS, which is the
-filesystem associated with our AWS EMR cluster.</p>
-
-<h3 id="bounding-boxes">Bounding Boxes</h3>
-
-<p>We then use Tensorflow for our machine learning to generate bounding boxes
+<p>First, we read in the historical video records of the Science Center Plaza.
+We then use Tensorflow for our machine learning to generate bounding boxes
 around objects of interest, including people, food trucks, bicycles, and cars.
-We used the Tensorflow framework, and used between one to eight <code class="highlighter-rouge">p2.xlarge</code>
-instances to generate the bounding boxes.
-The bounding boxes are outputted into a Spark Dataframe, which is then used
-to run our analytics.</p>
+We used the Tensorflow framework, and used one <code class="highlighter-rouge">p3.8xlarge</code> instance (which has 4 GPUs)
+to generate bounding boxes and class scores. Bounding boxes and scores are output into Spark 
+dataframes, which is then used to run our analytics.</p>
 
 <h3 id="analytics">Analytics</h3>
 
 <p>TODO: Write up analytics section</p>
+
+<h3 id="visualizations">Visualizations</h3>
+
+<p>TODO: Write up visualizations section</p>
 
   </div>
 

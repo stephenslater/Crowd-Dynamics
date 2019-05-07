@@ -7,6 +7,23 @@
     --primary: firebrick; 
   }
 
+@media screen and (max-width: 1200px){
+  
+  .h_logo{
+    
+    display: none;
+    
+    }
+}
+
+@media screen and (max-width: 600px){
+    .site-nav {
+        position: relative;
+        margin-bottom: 20px;
+    }
+}
+
+
 .h_logo{
     height: 75px;
     width: 273px;
@@ -33,6 +50,8 @@
 .site-header{
     display: flex;
     justify-content: space-around;
+    background-color: gray;
+    border-bottom: 1px solid darkgray;  
 }
 
 .site-nav{
