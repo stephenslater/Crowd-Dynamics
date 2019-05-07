@@ -12,6 +12,7 @@ import cv2
 import copy
 import mss
 
+
 def compute_center(bbox):
     y1, x1, y2, x2 = bbox
     return round(float(x1+x2)/2, 3), round(float(y1+y2)/2, 3)
@@ -104,6 +105,17 @@ if __name__ == '__main__':
     graph = tf.get_default_graph()
 
     MODEL_PATH = os.path.join(os.environ['HOME'], "models")
+    
+    # Alert if frame metric exceeds (THRESHOLD * historical average)
+    # Columns of history are: [avg group size, avg velocity, avg num people]
+    # Rows are 0, ..., 23 for the start of each of the 24 hours per day
+    THRESHOLD = 1.3
+    history = np.load('frame_averages.npz')['data']
+    thresholds = THRESHOLD * history
+    alert_msg = ['Average group size is high!', 'Average velocity is high!',
+                 'Number of people is high!']
+    alert_color = (255, 0, 0)
+    heights = [12, 52, 92]
 
     parser = argparse.ArgumentParser()
     parser.add_argument('-m', '--model', dest='model', type=str,
@@ -165,9 +177,6 @@ if __name__ == '__main__':
             avg_velocity = compute_avg(velocity)
         prev_centers = centers
         
-        # Compare to history
-
-
         # Make a copy of the image for displaying.
         display_image = image[:]
         display = np.array(image[:])
@@ -192,6 +201,17 @@ if __name__ == '__main__':
         cv2.putText(display, msg, (10, 420), font, fontscale, fontcolor, 2, cv2.LINE_AA)
         cv2.putText(display, vel_msg, (10, 380), font, fontscale, fontcolor, 2, cv2.LINE_AA)
         cv2.putText(display, gp_msg, (10, 340), font, fontscale, fontcolor, 2, cv2.LINE_AA)
+ 
+        # Compare current frame to historical average for corresponding hour
+        stats = np.array([avg_group_size, avg_velocity, num_dets])
+        # alerts = stats >= thresholds[hour]
+        alerts = [True, True, True] # Testing
+        
+        for i, alert in enumerate(alerts):
+            if alert:
+                cv2.putText(display, alert_msg[i], (10, height[i]), font, fontscale, alertcolor, 
+                            2, cv2.LINE_AA)
+                print ("\n*\n*\n*\n*\n*ALERT! {}: {}\n*\n*\n*\n*\n*".format(alert_msg, stats[i]))
         
         cv2.imshow("Science Center Plaza Stream", display)
         print("fps: {}".format(1 / (time.time() - last_time)))
