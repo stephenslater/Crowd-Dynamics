@@ -36,11 +36,25 @@ after repeated emails with AWS support we were only able to get access
 to 1 `p3.8xlarge` instances.
 We were still able to take advantage of GPU parallelism using `p3.8xlarge`
 instance, which has 4 NVIDIA V100 GPUs.
+We used the `Deep Learning AMI` image when spinning up our `p2.8xlarge` instance,
+since this provided us with an optimized version of Tensorflow.
+After SSHing into the `p2.xlarge` image, make sure to use the provided
+Tensorflow library with Python 3.6 with
 
-To replicate the results, first download a model. In our case, since we used Faster-RCNN with ResNet-101, we
-run
-
+```bash
+source activate tensorflow_p36
 ```
+
+Then, clone our repository to get all of the necessary scripts.
+
+```bash
+git clone https://github.com/stephenslater/Crowd-Dynamics
+```
+
+To replicate the results, first download a model. In our case, since we used
+Faster-RCNN with ResNet-101, we run
+
+```bash
 wget http://download.tensorflow.org/models/object_detection/faster_rcnn_resnet101_coco_2018_01_28.tar.gz
 tar -xvf faster_rcnn_resnet101_coco_2018_01_28.tar.gz ~/models
 ```
@@ -60,7 +74,6 @@ where `[MODEL]` is the model we want to use and `[VIDEO]` is the video we want t
 The model must be in the directory `~/models` and the video must be in the directory `~/videos`.
 If the video name is `[FILE].mkv`, the script will save an output dataframe with name `[FILE]` to 
 directory `~/output`.
-
 
 ### Crowd Analytics
 
