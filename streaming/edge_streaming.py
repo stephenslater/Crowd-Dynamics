@@ -115,7 +115,7 @@ if __name__ == '__main__':
     alert_msg = ['Average group size is high!', 'Average velocity is high!',
                  'Number of people is high!']
     alert_color = (255, 0, 0)
-    heights = [12, 52, 92]
+    height = [12, 52, 92]
 
     parser = argparse.ArgumentParser()
     parser.add_argument('-m', '--model', dest='model', type=str,
