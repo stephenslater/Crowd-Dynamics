@@ -6,7 +6,6 @@
 # Libraries
 import pandas as pd
 import numpy as np
-import os
 from functools import reduce
 
 # PySpark
@@ -18,16 +17,14 @@ import pyspark.sql.functions as F
 from pyspark.sql.types import *
 from pyspark.sql.window import Window
 
+# Window size
+window_minutes = 10 
+fps = 2.
 
-os.environ['PYSPARK_PYTHON'] = '/usr/bin/python3'
-os.environ['PYSPARK_DRIVER_PYTHON'] = '/usr/bin/python3'
-
-INPUT_PATH = os.path.join(os.environ['HOME'], "streaming-dataframes")
-OUTPUT_PATH = os.path.join(os.environ['HOME'], "streaming-csv")
-
+spark = SparkSession.builder.getOrCreate()
 
 """# Load data"""
-def process_video(directory, window_minutes, fps):
+def process_video(directory):
 
     # Schema for JSON
     schema = StructType([StructField('bboxes', ArrayType(DoubleType()), True),
@@ -37,7 +34,8 @@ def process_video(directory, window_minutes, fps):
 
     df = spark.read.json(directory, schema=schema)
     df = df.orderBy('timestamp')
-   
+    df.show()
+
     """# Functions used for UDFs (including velocity and group size)"""
     def count(column):
         return len(column)
@@ -202,6 +200,7 @@ def process_video(directory, window_minutes, fps):
             .withColumn('velocities', velocity_udf('pair_centers'))
             .withColumn('num_velocities', count_udf('velocities'))
             .withColumn('sum_velocities', sum_udf('velocities')))
+    df.show()
 
     """# Aggregate each 5 minute window to compute:
     - average number of people detected
@@ -225,25 +224,9 @@ def process_video(directory, window_minutes, fps):
             .drop('collect_list(y_centers)')
             .orderBy('window'))
 
+    agg_df.show()
     pandas_df = agg_df.toPandas()
-    pandas_df.to_csv(os.path.join(OUTPUT_PATH, '{}-{}mins.csv'.format(directory, window_minutes)))
+    pandas_df.to_csv('{}-{}mins.csv'.format(directory, window_minutes))
 
-# Window size
-window_minutes = 5 
-fps = 6.
-
-
-spark = SparkSession.builder.getOrCreate()
-
-schema = StructType([StructField('bboxes', ArrayType(DoubleType()), True),
-                         StructField('scores', ArrayType(DoubleType()), True),
-                         StructField('timestamp', StringType(), True),
-                         StructField('pair_bboxes', ArrayType(DoubleType()), True)])\
-
-df = spark.readStream.schema(schema).json(INPUT_PATH)
-
-print(df.isStreaming)
-# df.count()
-df.count().writeStream.outputMode('append').format('console').start().awaitTermination()
-directory = os.path.join(INPUT_PATH, '20190506-141153-12-6')
-process_video(directory, window_minutes, fps)
+directory = '20190506-083703-12'
+process_video(directory)
