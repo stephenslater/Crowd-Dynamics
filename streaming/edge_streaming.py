@@ -115,8 +115,8 @@ if __name__ == '__main__':
     alert_msg = ['Average group size is high!', 'Average velocity is high!',
                  'Number of people is high!']
     alert_color = (0, 0, 255)
-    start_height = 30
-    diff = 30
+    start_height = 45
+    diff = 40
     height = [start_height + i * diff for i in range(3)]
 
     parser = argparse.ArgumentParser()
@@ -174,6 +174,7 @@ if __name__ == '__main__':
 
         velocities = None
         avg_velocity = None
+        # Computing velocities requires two successive frames with an identified person
         if prev_centers:
             velocity = compute_velocities(prev_centers, centers)
             avg_velocity = compute_avg(velocity)
@@ -215,7 +216,7 @@ if __name__ == '__main__':
                 if alert:
                     cv2.putText(display, alert_msg[i], (10, height[i]), font, fontscale, alert_color, 
                                 2, cv2.LINE_AA)
-                print ("{}: {}".format(alert_msg, stats[i]))
+                print ("{}: {}".format(alert_msg[i], stats[i]))
             print ("\n*\n*\n*\n*\n*")
         
         cv2.imshow("Science Center Plaza Stream", display)
