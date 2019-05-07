@@ -115,7 +115,8 @@ if __name__ == '__main__':
     alert_msg = ['Average group size is high!', 'Average velocity is high!',
                  'Number of people is high!']
     alert_color = (0, 0, 255)
-    start_height = 45
+    # This position should be calibrated to the location of the plaza webcam screencap
+    start_height = 55
     diff = 40
     height = [start_height + i * diff for i in range(3)]
 
