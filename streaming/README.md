@@ -16,4 +16,4 @@ Then, Spark was used for the actual analytics computations, so we could
 process it with high throughput.
 
 1. `get_stream.py` grabs chunks of video from a livestream and downloads them to disk.
-2. `process_video.py` uses a deep convnet to process the video chunks into bounding boxes.
+2. `process_video.py` uses a deep convnet to process the video chunks into detection boxes, and then into analytics.
