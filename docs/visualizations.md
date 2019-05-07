@@ -52,7 +52,7 @@ This is just the how the distribution of people in the plaza evolves
 over the day.
 The specific day depicted in the video was April 10, 2019.
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/JhHHnR9V0NI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="youtube"></iframe>
+<iframe width="700" height="480" src="https://www.youtube.com/embed/JhHHnR9V0NI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="youtube"></iframe>
 
 
 We see that in the mornings, the distirbution is relatively uniform along
