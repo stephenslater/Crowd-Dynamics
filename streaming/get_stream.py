@@ -11,7 +11,7 @@ import os
 import argparse
 
 VIDEO_PATH = os.path.join(os.environ["HOME"], "streaming-videos")
-
+FRAME_RATE = 6
 
 def get_current():
     start = "https://d144v3end3hovo.cloudfront.net/monitor/harvard-spaces/science-center-plaza.stream/chunklist_w1332054195.m3u8"
@@ -28,11 +28,11 @@ if __name__ == "__main__":
     headers={"origin": "https://commonspaces.harvard.edu", "Referer" : "https://commonspaces.harvard.edu/plaza-webcam"}
     max = get_current()
     while True:
-        time.sleep(5)
+        time.sleep(1)
         url = "https://d144v3end3hovo.cloudfront.net/monitor/harvard-spaces/science-center-plaza.stream/media_w1332054195_" + str(curr_id) + ".ts"
         r = requests.get(url)
         if r.status_code != 404:
-            video_file = os.path.join(VIDEO_PATH, str(datetime.datetime.now().strftime('%Y%m%d-%H%M%S'))+'-12'+".ts")
+            video_file = os.path.join(VIDEO_PATH, str(datetime.datetime.now().strftime('%Y%m%d-%H%M%S'))+ ('-%d.ts' % FRAME_RATE))
             with open(video_file, 'wb') as textfile:
                 textfile.write(r.content)
             curr_id += 1

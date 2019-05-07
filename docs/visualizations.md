@@ -15,7 +15,9 @@ For example, here is a bar chart for the average number of people in the plaza,
 while aggregating with a window of 20 minutes for Thursday, April 11.
 We are able to see from the aggregated analytics when classes finish.
 
-![classtimesthursday](images/classtimesthursday.png)
+<p align="center"> 
+<img src="images/classtimesthursday.png">
+</p>
 
 If you want to explore a subset of the data yourself,
 check out this interactive graph.
@@ -37,9 +39,15 @@ over the individual bars.
 
 ### Average Velocity
 
-In order to compute the average velocity in each frame, we must consider the detected objects in the next frame. For person A in frame i, we need to identify the location of person A in frame i+1, and then approximate the velocity in frame i by dividing the distance traveled (between person A's centers) by the time, which is the inverse of the fps (frames per second).
+In order to compute the average velocity in each frame, we must consider the detected objects in the next frame.
+For person A in frame $i$, we need to identify the location of person A in frame $i+1$, and then approximate the velocity in frame i by dividing the distance traveled (between person A's centers) by the time, which is the inverse of the fps (frames per second).
 
-So, first, we must link people between frames. Since people are constantly entering and leaving the frame, the number of objects per frame (n_i) may not be consistent between successive frames. Therefore, for each frame, we can compute at most min(n_i, n_{i+1}) velocities. We compute pairwise distances between all objects in different frames, sort the pairs in ascending order of distance, and then greedily label each unassigned object in frame i to the closest unassigned object in frame i+1. We account for the edge case of a person leaving one end of the frame and another person entering on the opposite side of the next frame by only linking people whose distance is within a predefined threshold of 30% of the frame width or length. In particular, we compute the Euclidean distance between the centers (where the two dimensions of the centers are in [0, 1] as proportions of the frame dimension length), and then do not link objects if the distance exceeds 0.3.
+So, first, we must link people between frames.
+Since people are constantly entering and leaving the frame, the number of objects per frame ($n_i$) may not be consistent between successive frames.
+Therefore, for each frame, we can compute at most $\text{min}(n_i, n_{i+1})$ velocities.
+We compute pairwise distances between all objects in different frames, sort the pairs in ascending order of distance, and then greedily label each unassigned object in frame $i$ to the closest unassigned object in frame $i+1$.
+We account for the edge case of a person leaving one end of the frame and another person entering on the opposite side of the next frame by only linking people whose distance is within a predefined threshold of 30% of the frame width or length.
+In particular, we compute the Euclidean distance between the centers (where the two dimensions of the centers are in $[0, 1]$ as proportions of the frame dimension length), and then do not link objects if the distance exceeds $0.3$.
 
 Here is an example image, where the first frame (A) has 6 detected people, and the second frame (B) has 3 detected people. The green lines denote the link, and the velocity is computed as the length of the green line times the fps.
 
@@ -59,7 +67,7 @@ The specific day depicted in the video was April 10, 2019.
         frameborder="0"
         allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen
         class="youtube"
-        style="padding:10px;"></iframe>
+        style="padding:20px;"></iframe>
 
 We see that in the mornings, the distirbution is relatively uniform along
 the plaza, and occupy where the food trucks are (since the food trucks

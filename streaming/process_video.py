@@ -46,7 +46,6 @@ def pred_from_frame(frames):
     return bboxes, scores, n, classes
 
 def compute_center(bbox):
-    print(bbox)
     y1, x1, y2, x2 = bbox
     return round(float(x1+x2)/2, 3), round(float(y1+y2)/2, 3)
 
@@ -131,7 +130,7 @@ def compute_velocities(paired_centers, fps=2.0, threshold=0.3, return_assignment
     return [float(v) for v in velocities.values()]
 
 def compute_avg(vals):
-    return sum(vals) / len(vals)
+    return sum(vals) / len(vals) if len(vals) else 0.
 
 def process_video(video_path, batch_size=32, rate=1):
     split_name = os.path.splitext(os.path.basename(video_path))[0].split('-')
@@ -144,6 +143,7 @@ def process_video(video_path, batch_size=32, rate=1):
     all_scores, all_classes, all_n, all_bboxes, timestamps  = [], [], [], [], []
     start_time = time.time()
     video_running = True
+    total_frames = 0
     processed = 0
     while video_running:
         frames = []
@@ -153,11 +153,12 @@ def process_video(video_path, batch_size=32, rate=1):
                 if not ret:
                     video_running = False
                     break 
+                total_frames += 1
             if not video_running:
                 break
             frames.append(frame)
-            timestamps.append(str(initial + datetime.timedelta(seconds=rate*processed)))
             processed += 1
+            timestamps.append(str(initial + datetime.timedelta(seconds=total_frames/fps)))
         if not frames:
             break
         bboxes, scores, n, classes = pred_from_frame(frames)
@@ -167,7 +168,7 @@ def process_video(video_path, batch_size=32, rate=1):
         all_classes.append(classes)
         if not video_running:
             break
-    print('Frames processed: %d' % processed)
+    print('Total frames: %d, frames processed: %d' % (total_frames, processed))
     print("ML time: {} seconds".format(int(time.time() - start_time)))
     full_bboxes = np.row_stack(all_bboxes)
     full_scores = np.row_stack(all_scores)
@@ -202,6 +203,8 @@ def make_predictions(videoname):
     avg_velocities = list(map(compute_avg, velocities))   
     
     # TODO: Add code to visualize/otherwise use above computed values here
+    print ("Time of frame 1: {}\nTime of frame {}: {}".format(timestamps[0], len(timestamps), timestamps[-1]))
+
     
     end_time = time.time()
     print("Total time: {} seconds".format(time.time() - start_time))
@@ -214,4 +217,4 @@ while True:
     for filename in videos:
         print('Processing video %s' % filename)
         make_predictions(filename)
-        # os.remove(os.path.join(VIDEO_PATH, filename))	
+        os.remove(os.path.join(VIDEO_PATH, filename))
