@@ -2,6 +2,7 @@ import os
 import tensorflow as tf
 import numpy as np
 from matplotlib import pyplot as plt
+from datetime import datetime
 import time
 import tqdm
 import numpy as np
@@ -152,8 +153,7 @@ if __name__ == '__main__':
     prev_centers = None
     while True:
         last_time = time.time()
-        print ("time is {}".format(last_time))
-        print ("Type: {}".format(type))
+        hour = datetime.now().hour
         grabbed_image = sct.grab(monitor)
         image = np.array(grabbed_image)
         # Need to convert BGRA to BGR
@@ -211,16 +211,16 @@ if __name__ == '__main__':
         cv2.putText(display, gp_msg, (10, 340), font, fontscale, fontcolor, 2, cv2.LINE_AA)
  
         # Compare current frame to historical average for corresponding hour
-        # stats = np.array([avg_group_size, avg_velocity, num_dets])
-        # alerts = stats >= thresholds[hour]        
-        # if np.any(alerts):
-        #     print ("\n*\n*\n*\n*\n*ALERT!")
-        #     for i, alert in enumerate(alerts):
-        #         if alert:
-        #             cv2.putText(display, alert_msg[i], (10, height[i]), font, fontscale, alert_color, 
-        #                         2, cv2.LINE_AA)
-        #         print ("{}: {}".format(alert_msg[i], stats[i]))
-        #     print ("\n*\n*\n*\n*\n*")
+        stats = np.array([avg_group_size, avg_velocity, num_dets])
+        alerts = stats >= thresholds[hour]        
+        if np.any(alerts):
+            print ("\n*\n*\n*\n*\n*ALERT!")
+            for i, alert in enumerate(alerts):
+                if alert:
+                    cv2.putText(display, alert_msg[i], (10, height[i]), font, fontscale, alert_color, 
+                                2, cv2.LINE_AA)
+                print ("{}: {}".format(alert_msg[i], stats[i]))
+            print ("\n*\n*\n*\n*\n*")
         
         cv2.imshow("Science Center Plaza Stream", display)
         print("fps: {}".format(1 / (time.time() - last_time)))
