@@ -27,8 +27,9 @@ over the individual bars.
 
 <iframe src="interactive_analytics_graph.html"
         sandbox="allow-same-origin allow-scripts"
-        width="700"
-        height="480"
+        width="750"
+        height="500"
+        align="center"
         scrolling="no"
         seamless="seamless"
         frameborder="0" style="display: block; margin-left: auto; margin-right: auto; width: 500">
