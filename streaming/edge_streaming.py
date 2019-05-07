@@ -2,6 +2,7 @@ import os
 import tensorflow as tf
 import numpy as np
 from matplotlib import pyplot as plt
+from datetime import datetime
 import time
 import tqdm
 import numpy as np
@@ -11,6 +12,7 @@ from PIL import Image
 import cv2
 import copy
 import mss
+
 
 def compute_center(bbox):
     y1, x1, y2, x2 = bbox
@@ -104,6 +106,25 @@ if __name__ == '__main__':
     graph = tf.get_default_graph()
 
     MODEL_PATH = os.path.join(os.environ['HOME'], "models")
+    
+    # Constants for displaying frame metrics
+    font = cv2.FONT_HERSHEY_SIMPLEX
+    fontcolor = (0, 0, 0)
+    fontscale = 1
+
+    # Alert if frame metric exceeds (THRESHOLD * historical average)
+    # Columns of history are: [avg group size, avg velocity, avg num people]
+    # Rows are 0, ..., 23 for the start of each of the 24 hours per day
+    THRESHOLD = 1.3
+    history = np.load('frame_averages.npz')['data']
+    thresholds = THRESHOLD * history
+    alert_msg = ['Average group size is high!', 'Average velocity is high!',
+                 'Number of people is high!']
+    alert_color = (0, 0, 255)
+    # This position should be calibrated to the location of the plaza webcam screencap
+    start_height = 55
+    diff = 40
+    height = [start_height + i * diff for i in range(3)]
 
     parser = argparse.ArgumentParser()
     parser.add_argument('-m', '--model', dest='model', type=str,
@@ -125,13 +146,14 @@ if __name__ == '__main__':
 
     SCALING = 1.2
     monitor = {'top': 160,
-            'left': 160,
-            'width': int(640 * SCALING),
-            'height': int(360 * SCALING)}
+               'left': 160,
+               'width': int(640 * SCALING),
+               'height': int(360 * SCALING)}
     sct = mss.mss()
     prev_centers = None
     while True:
         last_time = time.time()
+        hour = datetime.now().hour
         grabbed_image = sct.grab(monitor)
         image = np.array(grabbed_image)
         # Need to convert BGRA to BGR
@@ -160,12 +182,12 @@ if __name__ == '__main__':
 
         velocities = None
         avg_velocity = None
+        # Computing velocities requires two successive frames with an identified person
         if prev_centers:
             velocity = compute_velocities(prev_centers, centers)
             avg_velocity = compute_avg(velocity)
+        prev_centers = centers
         
-
-
         # Make a copy of the image for displaying.
         display_image = image[:]
         display = np.array(image[:])
@@ -184,12 +206,21 @@ if __name__ == '__main__':
         msg = "Number of people: {}".format(num_dets)
         vel_msg = "Average velocity: {}".format(avg_velocity)
         gp_msg = "Average group size: {}".format(avg_group_size)
-        font = cv2.FONT_HERSHEY_SIMPLEX
-        fontcolor = (0, 0, 0)
-        fontscale = 1
         cv2.putText(display, msg, (10, 420), font, fontscale, fontcolor, 2, cv2.LINE_AA)
         cv2.putText(display, vel_msg, (10, 380), font, fontscale, fontcolor, 2, cv2.LINE_AA)
         cv2.putText(display, gp_msg, (10, 340), font, fontscale, fontcolor, 2, cv2.LINE_AA)
+ 
+        # Compare current frame to historical average for corresponding hour
+        stats = np.array([avg_group_size, avg_velocity or 0.0, num_dets])
+        alerts = stats >= thresholds[hour]        
+        if np.any(alerts):
+            print ("\n*\n*\n*\n*\n*ALERT!")
+            for i, alert in enumerate(alerts):
+                if alert:
+                    cv2.putText(display, alert_msg[i], (10, height[i]), font, fontscale, alert_color, 
+                                2, cv2.LINE_AA)
+                print ("{}: {}".format(alert_msg[i], stats[i]))
+            print ("\n*\n*\n*\n*\n*")
         
         cv2.imshow("Science Center Plaza Stream", display)
         print("fps: {}".format(1 / (time.time() - last_time)))

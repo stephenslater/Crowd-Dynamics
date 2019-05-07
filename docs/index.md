@@ -9,7 +9,7 @@ and tourists. The Science Center Plaza also has a live stream video feed 24
 hours per day, which you can check out
 [here](https://commonspaces.harvard.edu/plaza-webcam).
 However, can we use this data to make decisions, such as when to schedule
-events in the plaza? However, we only have a large amount of raw video data,
+events in the plaza?
 
 Our project provides real-time crowd analytics with object detection of people
 and average interframe and intraframe metrics, such as number of people, group
@@ -19,35 +19,39 @@ current analytics to the historical data for the corresponding time period in
 order to detect interesting events such as large groups of people or fast
 movement.
 
-## Why Big Data? 
+## Big Data and Big Compute
 
 This problem requires the use of multiple frameworks:
 
 * __Big Data:__ because we process 150 GB of low-resolution historical video.
-* __HPC:__: handling the throughput for streaming analytics of real-time science
+* __Big Compute/HPC:__ handling the throughput for streaming analytics of real-time science
 center plaza video feed
 
-## Infrastructures and Methodologies
+With the Big Data part of our solution, we have fine-grained data parallelism and a SPMD execution model,
+while with the Big Compute component, we have coarse-grained data and functional parallelism and a DAT
+execution model.
 
-Our solution uses a pre-trained neural network (Faster R-CNN) across 8 GPUs to
-identify bounding boxes of people, and then 32 CPU cores to compute the
-analytics. For infrastructure, we use AWS EMR, Databricks on Spark ML to run
-our TensorFlow model, and Spark Streaming for real-time analytics.
+## Data, Software, and Infrastructure
 
-## The Technical Stuff
+We continuously collected from the Science Center Plaza Webcam over the course of multiple weeks.
 
-We used a deep convolutional neural net using the Faster-RCNN architecture [1]
-for detecting people, bicycles, cars, and trucks.
-We used a pretrained model that was trained on Microsoft COCO [2], a dataset of
-common objects in context.
-The dataset is composed of a large number of images with a total of 91 unique
-objects with labels; however, we only care detecting pedestrians, so we only
-focus on detecting one class (person).
+The basic outline of our solutions is as follows. We begin by feeding our data through an object detection
+model to obtain bounding boxes identifying person locations. We then compute analytics such as number of
+people, velocities, gorup sizes, and locations based on bounding boxes. For historical analysis, we then
+perform some aggregation of these statistics over short periods of time. For streaming, we just directly work
+with the output analytics. After analytics computation is complete, we feed the results into a variety of visualizations.
+
+We use AWS EC2 GPU instances to run object detection, and Spark on AWS EMR to perform analytics computation.
+
+See the [implementation page](implementation.html) for more details on our software and infrastructure.
+
 
 ## Code and Data
 
 Our code can be found on Github
 [here](http://www.github.com/stephenslater/crowd-dynamics).
+
+Our data can be found on S3
 
 TODO: Add S3 links to our data files.
 
@@ -72,9 +76,3 @@ In the data, we are able to see:
     <li>How long people stay in the science center plaza to eat.</li>
     <li>and many more!</li>
 </ul>
-
-## Citations
-
-1. Ren, Shaoqing et al. “Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks.” IEEE Transactions on Pattern Analysis and Machine Intelligence 39.6 (2017): 1137–1149. Crossref. Web.
-
-2. Lin, Tsung-Yi et al. “Microsoft COCO: Common Objects in Context.” Lecture Notes in Computer Science (2014): 740–755. Crossref. Web.
