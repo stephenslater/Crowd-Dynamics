@@ -1,3 +1,7 @@
+"""Grabs and downloads chunks of video from a live data source. You can specify
+the livestream source using the start, header, and url variables. These chunks
+are immediately fed into an object detection model using Tensorflow in another
+script. """
 import requests
 import time
 from boto import kinesis
