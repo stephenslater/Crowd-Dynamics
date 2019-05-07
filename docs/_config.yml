@@ -3,7 +3,6 @@ theme: minima
 header_pages:
   - index.md
   - implementation.md
-  - requirements.md
   - tuning.md
   - performance.md
   - visualizations.md
