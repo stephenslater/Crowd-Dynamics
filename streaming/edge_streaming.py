@@ -181,10 +181,10 @@ if __name__ == '__main__':
         avg_group_size = compute_avg(group_size)
 
         velocities = None
-        avg_velocity = None
+        avg_velocity = 0.
         # Computing velocities requires two successive frames with an identified person
         if prev_centers:
-            velocity = compute_velocities(prev_centers, centers)
+            velocity = compute_velocities((prev_centers, centers))
             avg_velocity = compute_avg(velocity)
         prev_centers = centers
         
@@ -204,8 +204,8 @@ if __name__ == '__main__':
                 cv2.circle(display, (cx, cy), 5, color, -1)
         
         msg = "Number of people: {}".format(num_dets)
-        vel_msg = "Average velocity: {}".format(avg_velocity)
-        gp_msg = "Average group size: {}".format(avg_group_size)
+        vel_msg = "Average velocity: %.3f" % avg_velocity
+        gp_msg = "Average group size: %.3f" % avg_group_size
         cv2.putText(display, msg, (10, 420), font, fontscale, fontcolor, 2, cv2.LINE_AA)
         cv2.putText(display, vel_msg, (10, 380), font, fontscale, fontcolor, 2, cv2.LINE_AA)
         cv2.putText(display, gp_msg, (10, 340), font, fontscale, fontcolor, 2, cv2.LINE_AA)
