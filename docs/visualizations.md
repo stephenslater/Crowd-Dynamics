@@ -49,6 +49,11 @@ In particular, we compute the Euclidean distance between the centers (where the 
 Here is an example image, where the first frame (A) has 6 detected people, and the second frame (B) has 3 detected people. The green lines denote the link, and the velocity is computed as the length of the green line times the fps.
 
 ![linking](images/linking.png)
+<p align="center"> 
+
+<img src="images/linking.png">
+</p>
+
 
 ## Hotspots
 
@@ -58,8 +63,7 @@ This is just the how the distribution of people in the plaza evolves
 over the day.
 The specific day depicted in the video was April 10, 2019.
 
-<iframe width="700" height="480" src="https://www.youtube.com/embed/JhHHnR9V0NI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="youtube"></iframe>
-
+<iframe width="640" height="480" src="https://www.youtube.com/embed/JhHHnR9V0NI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="youtube"></iframe>
 
 We see that in the mornings, the distirbution is relatively uniform along
 the plaza, and occupy where the food trucks are (since the food trucks
@@ -75,4 +79,4 @@ It's also nice to be able to look at the detections themselves.
 We are able to get the detections and plot different classes to check if the
 detections are reasonable.
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/eN9tTVJ9J2c" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="youtube"></iframe>
+<iframe width="640" height="480" src="https://www.youtube.com/embed/eN9tTVJ9J2c" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="youtube"></iframe>
