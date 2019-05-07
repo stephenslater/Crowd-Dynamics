@@ -52,7 +52,8 @@ This is just the how the distribution of people in the plaza evolves
 over the day.
 The specific day depicted in the video was April 10, 2019.
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/JhHHnR9V0NI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/JhHHnR9V0NI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="youtube"></iframe>
+
 
 We see that in the mornings, the distirbution is relatively uniform along
 the plaza, and occupy where the food trucks are (since the food trucks
@@ -69,4 +70,3 @@ We are able to get the detections and plot different classes to check if the
 detections are reasonable.
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/eN9tTVJ9J2c" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="youtube"></iframe>
-
