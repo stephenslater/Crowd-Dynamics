@@ -59,7 +59,7 @@ The specific day depicted in the video was April 10, 2019.
         frameborder="0"
         allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen
         class="youtube"
-        style="padding:10px;"></iframe>
+        style="padding:20px;"></iframe>
 
 We see that in the mornings, the distirbution is relatively uniform along
 the plaza, and occupy where the food trucks are (since the food trucks
