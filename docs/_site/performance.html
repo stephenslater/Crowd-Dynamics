@@ -41,7 +41,13 @@
   </header>
 
   <div class="post-content">
-    <!-- ## Theoretical Speedup
+    <h2 id="process">Process</h2>
+
+<p>To measure scaling we used an AWS EMR cluster of 8 m4.xlarge workers with 4 cores each to compute historical analytics on the detected objects that we identified from 150 GB of video.</p>
+
+<p><img src="/images/8nodes.png" alt="8nodes" /></p>
+
+<!-- ## Theoretical Speedup
 
 We use Gustafson's Law to calculate speedup: 
 
@@ -59,14 +65,83 @@ Running 8 p2.xlarge instances as worker nodes gives $$p=8$$. We can then calcula
 
 TODO: Talk about performance -->
 
-<p><img src="/images/plots1.png" />
-<img src="/images/plots2.png" /></p>
+<h2 id="strong-scaling">Strong Scaling</h2>
+
+<p>Strong scaling (fixed problem size) of aggregation of 100 hours of bounding boxes into 20-minute windows</p>
+
+<p><img src="/images/speedup.png" /></p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center"># Executors (Row) / Cores (Col)</th>
+      <th style="text-align: center">1</th>
+      <th style="text-align: center">2</th>
+      <th style="text-align: center">3</th>
+      <th style="text-align: center">4</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">130.6036292552948</td>
+      <td style="text-align: center">151.8580044269562</td>
+      <td style="text-align: center">164.2707266330719</td>
+      <td style="text-align: center">149.00747709274293</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">2</td>
+      <td style="text-align: center">142.3604470252991</td>
+      <td style="text-align: center">143.8039128780365</td>
+      <td style="text-align: center">153.2352751255035</td>
+      <td style="text-align: center">159.88366103172302</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">3</td>
+      <td style="text-align: center">137.6322629451752</td>
+      <td style="text-align: center">147.9056767940521</td>
+      <td style="text-align: center">148.7119328022003</td>
+      <td style="text-align: center">144.19866309165954</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">4</td>
+      <td style="text-align: center">134.2263833522797</td>
+      <td style="text-align: center">135.0394935131073</td>
+      <td style="text-align: center">124.2541794300079</td>
+      <td style="text-align: center">131.04245553016662</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">5</td>
+      <td style="text-align: center">143.3751981735230</td>
+      <td style="text-align: center">135.3142168521881</td>
+      <td style="text-align: center">115.2301400184631</td>
+      <td style="text-align: center">117.34413194656372</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">6</td>
+      <td style="text-align: center">133.5113302230835</td>
+      <td style="text-align: center">115.5624811649323</td>
+      <td style="text-align: center">111.8524597167969</td>
+      <td style="text-align: center">107.45588517189026</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">7</td>
+      <td style="text-align: center">128.5110889911652</td>
+      <td style="text-align: center">106.3509711265564</td>
+      <td style="text-align: center">103.2844680309296</td>
+      <td style="text-align: center">103.79440789222717</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">8</td>
+      <td style="text-align: center">118.0175147533417</td>
+      <td style="text-align: center">95.38883476257324</td>
+      <td style="text-align: center">98.73593525886535</td>
+      <td style="text-align: center">91.498237657547</td>
+    </tr>
+  </tbody>
+</table>
 
 <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
-
-<p>Using AWS EMR cluster of 8 m4.xlarge workers with 4 cores each to compute historical analytics on the detected objects that we identified from 150 GB of video:</p>
-
-<p><img src="/images/8nodes.png" alt="8nodes" /></p>
 
 
   </div>

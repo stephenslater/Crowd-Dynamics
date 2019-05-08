@@ -12,7 +12,7 @@ We're able to see when people start moving around the square, and how many
 people are moving at any point in time.
 We count the number of people in the square at any point in time.
 For example, here is a bar chart for the average number of people in the plaza,
-while aggregating with a window of 20 minutes for Thursday, April 11.
+while aggregating with a window of 20 minutes for Wednesday, April 10.
 We are able to see from the aggregated analytics when classes finish.
 
 <p align="center"> 

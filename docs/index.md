@@ -33,7 +33,7 @@ execution model.
 
 ## Data, Software, and Infrastructure
 
-We continuously collected from the Science Center Plaza Webcam over the course of multiple weeks.
+We continuously captured from the Science Center Plaza Webcam over the course of multiple weeks.
 
 The basic outline of our solutions is as follows. We begin by feeding our data through an object detection
 model to obtain bounding boxes identifying person locations. We then compute analytics such as number of
