@@ -90,7 +90,7 @@ In the data, we are able to see:
 
 ## Conclusions
 
-For more information, please see the presentation tab or look [here.](presentations.md)
+For more information regarding software design, challenges, etc. please see the presentation tab or look [here.](presentation)
 
 Overall, we successfully used big data and big compute infrastructures combined with TensorFlow to develop analytics of 
 real-time crowd dynamics compared to historical data for the Science Center Plaza.
@@ -106,7 +106,7 @@ executor), so we concatenated and flattened bounding box data for adjacent frame
 
 
 From these challenges, we learned that data format needs to be very carefully selected before loading it into a Spark 
-Dataframe, and we need to be careful when developing how to compute analytics, and which metrics to compute in a distributed 
+DataFrame, and we need to be careful when developing how to compute analytics, and which metrics to compute in a distributed 
 system (i.e. choice of UDF).
 
 
