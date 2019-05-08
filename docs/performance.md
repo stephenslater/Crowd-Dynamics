@@ -55,7 +55,7 @@ We see in general the speedup increases with number of executors. The point at w
 
 We evaluate weak scaling (fixed problem size per node) for our analytics/aggregation stage for historical data processing. We again do this by running our analytics/aggregation code on various amounts of bounding boxes (Spark dataframes output from the object detection stage) with aggregation into 10-minute windows. In particular, to vary the amount of data that we feed in, we duplicate our 100 hours of data various numbers of time, and change the number of nodes by changing the number of executors.
 
-The following is a plot of our runtime results for various numbers of executors/duplication, as well as a table containing the same information. We also have the theoretical result, which is constant.
+The following is a plot of our runtime results for various numbers of executors/duplication, as well as a table containing the same information. We also have the theoretical perfect scaling result plotted, which is constant.
 
 <img src="{{ "images/weak.png" | relative_url}}" >
 
@@ -68,7 +68,8 @@ The following is a plot of our runtime results for various numbers of executors/
 |           6           | 324.3446888923645 |
 |           8           | 356.1513466835022 |
 
-We observe that the runtime appears to be slower than the theretical.
+We observe that the runtime appears to be slower than the theoretical, likely due to various overheads from synchronization
+and communication.
 
 ## Fixed Computation Scaling
 
