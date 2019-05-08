@@ -46,7 +46,7 @@ number of people found by just counting the number of bounding boxes. Group size
 
 To compute group size, we must determine how far apart the detected people are from each other within the same frame.
 In order to do this, we use a depth-first-search. In particular, we construct a graph where the nodes are the centers of the detected people, and the edges are the distances between the centers.
-We connect 2 nodes with an undirected edge *iff* the Euclidean distance between the centers is less than the threshold of 0.1, where the coordinates of the two dimensinos are given as proportinos of the overall width and length of the screen (i.e. values are in [0, 1]). 
+We connect 2 nodes with an undirected edge *iff* the Euclidean distance between the centers is less than the threshold of 0.1, where the coordinates of the two dimensinos are given as proportinos of the overall width and length of the screen (i.e. values are in [0, 1]).
 
 After constructing the graph, we identify the connected components through depth-first-search, where a component contains all nodes reachable from each other. The size of each component is the group size. The number of groups is the number of distinct connected components.
 
@@ -69,8 +69,16 @@ Here is an example image, where the first frame (A) has 6 detected people, and t
 </p>
 
 ### Visualizations
+
 We take the augmented Spark dataframe from our analytics step and convert it back into a Pandas dataframe for
-visualization. With this dataframe, create visualizations using the Bokeh library for interactive graphs,
+visualization. 
+The pandas dataframe looks something like this:
+
+<p align="center"> 
+<img src="images/processed_dataframe.png">
+</p>
+
+With this dataframe, we create visualizations using the Bokeh library for interactive graphs,
 and CV2 with matplotlib to draw the bounding boxes on the original video. See the [visualizations](visualizations.html) tab for various interactive plots!
 
 ## Citations
