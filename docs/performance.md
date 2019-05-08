@@ -4,7 +4,7 @@ title: Performance
 
 ## Process
 
-To measure scaling we used an AWS EMR cluster of 8 m4.xlarge workers (which have 4 cores each) to compute historical analytics on the detected objects that we identified from 150 GB of video.
+To measure scaling we used an AWS EMR cluster of 8 m4.xlarge workers (which have 4 cores each) to compute historical analytics on the detected objects that we identified from 150 GB of video. Here's a fun image of all the cores on all 8 workers being used.
 
 ![8nodes](images/8nodes.png)
 
@@ -34,7 +34,7 @@ by running our analytics/aggregation code on of 100 hours of bounding boxes (Spa
 stage) with aggregation into 10-minute windows. We vary the computation by varying the number of executors and executors per 
 core.
 
-The following is a plot of our speedup results for various numbers of executors and executors per core on Spark, as well as a table containing the same information.
+The following is a plot of our runtime results for various numbers data duplication, as well as a table containing the same information.
 
 <img src="{{ "images/strong.png" | relative_url}}" >
 
@@ -53,13 +53,28 @@ We see in general the speedup increases with number of executors. The point at w
 
 ## Weak Scaling
 
-TODO
+We evaluate weak scaling (fixed problem size per node) for our analytics/aggregation stage for historical data processing. We again do this by running our analytics/aggregation code on various amounts of bounding boxes (Spark dataframes output from the object detection stage) with aggregation into 10-minute windows. In particular, to vary the amount of data that we feed in, we duplicate our 100 hours of data various numbers of time, and change the number of nodes by changing the number of executors.
+
+The following is a plot of our runtime results for various numbers of executors/duplication, as well as a table containing the same information. We also have the theoretical result, which is constant.
+
+<img src="{{ "images/weak.png" | relative_url}}" >
+
+| # Duplications of data | Runtime (s)
+| :-------------------: |:-:|
+|           1           | 150.5760748386383 |
+|           2           | 217.4989287853241 |
+|           3           | 240.30133509635925 |
+|           4           | 258.0302278995514 |
+|           6           | 324.3446888923645 |
+|           8           | 356.1513466835022 |
+
+We observe that the runtime appears to be slower than the theretical.
 
 ## Fixed Computation Scaling
 
 We evaluate fixed computation scaling for our analytics/aggregation stage for historical data processing. We again do this by running our analytics/aggregation code on various amounts of bounding boxes (Spark dataframes output from the object detection stage) with aggregation into 10-minute windows. In particular, to vary the amount of data that we feed in, we duplicate our 100 hours of data various numbers of time.
 
-The following is a plot of our speedup results for various numbers of executors and executors per core on Spark, as well as a table containing the same information.
+The following is a plot of our runtime results for various numbers of executors and executors per core on Spark, as well as a table containing the same information.
 
 <img src="{{ "images/fixed_comp.png" | relative_url}}" >
 
