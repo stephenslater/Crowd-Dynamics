@@ -90,7 +90,7 @@ In the data, we are able to see:
 
 ## Conclusions
 
-For more information, please see the presentation tab or look [here.](presentations.md).
+For more information, please see the presentation tab or look [here.](presentations.md)
 
 Overall, we successfully used big data and big compute infrastructures combined with TensorFlow to develop analytics of 
 real-time crowd dynamics compared to historical data for the Science Center Plaza.
