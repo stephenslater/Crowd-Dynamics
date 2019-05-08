@@ -44,7 +44,11 @@ number of people found by just counting the number of bounding boxes. Group size
 
 #### Group Size
 
-TODO: Add details of how this is done.
+To compute group size, we must determine how far apart the detected people are from each other within the same frame.
+In order to do this, we use a depth-first-search. In particular, we construct a graph where the nodes are the centers of the detected people, and the edges are the distances between the centers.
+We connect 2 nodes with an undirected edge *iff* the Euclidean distance between the centers is less than the threshold of 0.1, where the coordinates of the two dimensinos are given as proportinos of the overall width and length of the screen (i.e. values are in [0, 1]). 
+
+After constructing the graph, we identify the connected components through depth-first-search, where a component contains all nodes reachable from each other. The size of each component is the group size. The number of groups is the number of distinct connected components.
 
 #### Velocity
 

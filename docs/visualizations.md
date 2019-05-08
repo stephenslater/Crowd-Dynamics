@@ -51,7 +51,7 @@ The specific day depicted in the video was April 10, 2019.
         class="youtube"
         style="padding:20px;"></iframe>
 
-We see that in the mornings, the distirbution is relatively uniform along
+We see that in the mornings, the distribution is relatively uniform along
 the plaza, and occupy where the food trucks are (since the food trucks
 don't come until noon).
 Then, we can see the different paths through the plaza light up as
