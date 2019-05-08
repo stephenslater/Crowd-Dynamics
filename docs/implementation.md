@@ -61,9 +61,13 @@ with only four columns for simplicity.
 
 Note that the pair_bboxes column contains information from the following frame. The $$k$$’th row of the pair_bboxes column is of the form:
 $$[n, y1_i, x1_i, y2_i, x2_i, …, y1_j, x1_j, y2_j, x2_j]$$
+
 where:
+
 - $$n$$ denotes the number of people detected in the kth frame
-- $$y1_i, x1_i, y2_i, x2_i$$ denote the coordinates of the bboxes (indexed by $$i$$) in frame $$k$$$
+
+- $$y1_i, x1_i, y2_i, x2_i$$ denote the coordinates of the bboxes (indexed by $$i$$) in frame $$k$$
+
 - $$y1_j, x1_j, y2_j, x2_j$$ denote the coordinates of the bboxes (indexed by $$j$$) in frame $$k+1$$
 
 Previously, we stored an extra column of the bounding boxes of the next frame so that we could compute the velocity. This required using 2 columnsa at the same time. However, PySpark was reverting to 1 worker and 1 core to process UDFs with 2 columns, so we chose to store the data in this way so that we could compute the velocity ocess this data in a udf that takes in just 1 column, and parses the input array similar to:
