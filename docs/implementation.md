@@ -6,7 +6,7 @@ throughout the entire pipeline.
 
 ## Data Pipeline
 
-We mainly use distributed Tensorflow for the machine learning inference and
+We mainly use Tensorflow distributed over GPUs for the machine learning inference and
 Spark for the following data analytics.
 Our pipeline looks like this:
 
@@ -14,23 +14,17 @@ Our pipeline looks like this:
 
 Our project can be split up into multiple stages.
 
-### Video Processing Object Detection
+### 1. Object Detection
 
-First, we read in the historical video records of the Science Center Plaza and turn our collected video into 1 hour chunks.
-To do much of this processing, we use `ffmpeg`. In order to mitigate overhead, we store month of data as compressed video, which reduces the amount we have to store to 23.8 GM instead of 6 TB.
-
-
-
-Store month of data as compressed video (23.8 GB instead of 6 TB)
-
-
-### Object Detection
+For object detection, we must first process the video data. 
+We read in the historical video records of the Science Center Plaza and turn our collected video into 1 hour chunks.
+To do much of this processing, we use `ffmpeg`. In order to mitigate overhead, we store 1 month of data as compressed video, which reduces the amount we have to store to 23.8 GB instead of 6 TB (approximately 210 GB/day for 30 days).
 
 Once the video has been read in from the stream, we use a TensorFlow implementation of an object detection model to generate 
 bounding boxes. In particular, we use a deep convolutional neural net using the Faster-RCNN architecture [1]
 for detecting people, bicycles, cars, and trucks. We used a pretrained model that was trained on Microsoft COCO [2], 
 a dataset of common objects in context. The dataset is composed of a large number of images with a total of 91 unique
-objects with labels; however, we only care detecting pedestrians, so we only focus on detecting one class (person). 
+objects with labels; however, we only care about detecting pedestrians, so we only focus on detecting one class (person). 
 
 When feeding frames into the model, we initially considered processing video into tons of images, and then distributing those 
 images, but we noted that processing uncompressed images is too slow, as EC2 instances are bottlenecked by network bandwidth. 
@@ -43,39 +37,41 @@ bounding boxes. We save this output data to Spark dataframes, where each row con
 We run this stage of our computation on a AWS EC2 instance with GPU, in particular a p3.8xlarge instance, which has 4 GPUs
 with a Deep Learning AMI (Ubuntu) Version 22.0.
 
-The output from the machine learning model looks something like this as a dataframe.
+The output from the machine learning model looks like this as a dataframe.
 Everything else needs to be calculated, windowed, and processed using spark.
 
 ```bash
-+-------------------+--------------------+--------------------+
-|              frame|              bboxes|              scores|
-+-------------------+--------------------+--------------------+
-|1970-01-01 00:00:00|[0.59336024522781...|[0.93980032205581...|
-|1970-01-01 00:00:01|[0.62502855062484...|[0.89926099777221...|
-|1970-01-01 00:00:02|[0.72911220788955...|[0.98777532577514...|
-|1970-01-01 00:00:03|[0.78701549768447...|[0.97126829624176...|
-|1970-01-01 00:00:04|[0.48519986867904...|[0.93738293647766...|
-|1970-01-01 00:00:05|[0.67814970016479...|[0.97286134958267...|
-|1970-01-01 00:00:06|[0.57940828800201...|[0.98793494701385...|
-|1970-01-01 00:00:07|[0.71229845285415...|[0.98705601692199...|
-|1970-01-01 00:00:08|[0.34067243337631...|[0.77425789833068...|
-|1970-01-01 00:00:09|[0.78984218835830...|[0.97743964195251...|
-|1970-01-01 00:00:10|[0.39440840482711...|[0.92999798059463...|
-|1970-01-01 00:00:11|[0.60313117504119...|[0.93863993883132...|
-|1970-01-01 00:00:12|[0.82778960466384...|[0.91649687290191...|
-|1970-01-01 00:00:13|[0.51006656885147...|[0.97323024272918...|
-|1970-01-01 00:00:14|[0.56186217069625...|[0.89469927549362...|
-|1970-01-01 00:00:15|[0.67285186052322...|[0.97309362888336...|
-|1970-01-01 00:00:16|[0.35979881882667...|[0.84619909524917...|
-|1970-01-01 00:00:17|[0.39222764968872...|[0.71783727407455...|
-|1970-01-01 00:00:18|[0.47849225997924...|[0.92085105180740...|
-|1970-01-01 00:00:19|[0.51487535238265...|[0.81251215934753...|
-+-------------------+--------------------+--------------------+
-only showing top 20 rows
++-------------------+--------------------+--------------------+--------------------+
+|              frame|              bboxes|              scores|         pair_bboxes|
++-------------------+--------------------+--------------------+--------------------+
+|2019-04-10 00:00:00|[0.59336024522781...|[0.93980032205581...|[3, ...             |
+|2019-04-10 00:00:01|[0.62502855062484...|[0.89926099777221...|[5, ...             |
+|2019-04-10 00:00:02|[0.72911220788955...|[0.98777532577514...|[5, ...             |
+|2019-04-10 00:00:03|[0.78701549768447...|[0.97126829624176...|[7, ...             |
+|2019-04-10 00:00:04|[0.48519986867904...|[0.93738293647766...|[8, ...             |
+|2019-04-10 00:00:05|[0.67814970016479...|[0.97286134958267...|[11, ...            |
+|2019-04-10 00:00:06|[0.57940828800201...|[0.98793494701385...|[12, ...            |
+|2019-04-10 00:00:07|[0.78984218835830...|[0.97743964195251...|[10, ...            |
+|2019-04-10 00:00:08|[0.51487535238265...|[0.81251215934753...|[9, ...             |
++-------------------+--------------------+--------------------+--------------------+
+only showing the top 9 rows
 ```
 
-with only three columns for simplicity.
-The corresponding schema is
+with only four columns for simplicity. 
+
+Note that the pair_bboxes column contains information from the following frame. The $$k$$’th row of the pair_bboxes column is of the form:
+$$[n, y1_i, x1_i, y2_i, x2_i, …, y1_j, x1_j, y2_j, x2_j]$$
+where:
+- $$n$$ denotes the number of people detected in the kth frame
+- $$y1_i, x1_i, y2_i, x2_i$$ denote the coordinates of the bboxes (indexed by $$i$$) in frame $$k$$$
+- $$y1_j, x1_j, y2_j, x2_j$$ denote the coordinates of the bboxes (indexed by $$j$$) in frame $$k+1$$
+
+Previously, we stored an extra column of the bounding boxes of the next frame so that we could compute the velocity. This required using 2 columnsa at the same time. However, PySpark was reverting to 1 worker and 1 core to process UDFs with 2 columns, so we chose to store the data in this way so that we could compute the velocity ocess this data in a udf that takes in just 1 column, and parses the input array similar to:
+$$n$$ = array[0]
+$$frame_k$$ bboxes = array[1:4*n+1]
+$$frame_{k+1}$$ bboxes = array[4*n+1:]
+
+The corresponding schema of the DataFrame is:
 
 ```bash
 root
@@ -84,11 +80,13 @@ root
  |    |-- element: double (containsNull = true)
  |-- scores: array (nullable = true)
  |    |-- element: double (containsNull = true)
+ |-- pair_bboxes: array (nullable = true)
+ |    |-- element: double (containsNull = true)
 ```
 
-The Spark Dataframe is now used for our metrics.
+The Spark DataFrame is now used for our metrics.
 
-### Analytics
+### 2. Analytics
 
 To perform our analytics, we apply user defined function transformations to the columns of the Spark dataframes from the 
 object detection step. These analytics include locations of people, number of people, group size, and velocities. After 
@@ -96,7 +94,7 @@ computing analytics on the historical data, we also aggregate over short windows
 computations have been completed, we write our results to a Pandas dataframe to be used in the visualization code.
 
 We run this stage of our computation on a AWS EMR cluster with Spark. In particular, we use emr-5.23.0, which has
-Spark 2.4.0 on Hadoop 2.8.5 YARN with Ganglia 3.7.2 and Zeppelin 0.8.1, and have 8 m4.xlarge instances in our cluster.
+Spark 2.4.0 on Hadoop 2.8.5 YARN with Ganglia 3.7.2 and Zeppelin 0.8.1, and have 8 m4.xlarge worker instances on our cluster.
 
 We now provide some more details on how our analytics transformation were done. Locations of people and number of people are both fairly straightforward, to calculate, with location computed by finding the centers of the input bounding boxes and
 number of people found by just counting the number of bounding boxes. Group size and velocity computations are a bit more involved, however, and are described in detail below.
@@ -127,7 +125,7 @@ Here is an example image, where the first frame (A) has 6 detected people, and t
 <img src="images/linking.png">
 </p>
 
-### Visualizations
+### 3. Visualizations
 
 We take the augmented Spark dataframe from our analytics step and convert it back into a Pandas dataframe for
 visualization. 
