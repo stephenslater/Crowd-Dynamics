@@ -56,11 +56,11 @@ Our code can be found on Github
 
 Our data can be found on S3:
 
-* Processed Bounding Boxes: [here](https://s3.amazonaws.com/science-center-plaza-data/data/all_detections.tar.gz)
+* Processed Bounding Boxes: [here](https://drive.google.com/open?id=1g1MuCQdZyXJoDIY28-wriIBqh4G_DRgT)
 
-* Processed Bounding Boxes Combined: [here](https://s3.amazonaws.com/science-center-plaza-data/data/all_detections_combined.tar.gz)
+* Processed Bounding Boxes Combined: [here](https://drive.google.com/open?id=1uLOzrqadUjTC3b4PvPaHHIJkFJY0azRW)
 
-* Video Data: [here](https://s3.console.aws.amazon.com/s3/buckets/science-center-plaza-data)
+* Video Data: [here](https://drive.google.com/drive/folders/15Ui7FiJQtIAhgsCwmYHJ0k8dIodDR7x5?usp=sharing)
 
 
 ## Visualizations
