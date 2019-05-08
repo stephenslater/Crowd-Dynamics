@@ -27,7 +27,7 @@ the Arts First event, which had many events in the plaza).
 The scripts were all run in an EMR cluster. We used the latest version of EMR
 with Spark 2.4.0, and ran everything using `m4.xlarge` instances.
 
-1. `analytics.py`: Reads in object detections from the processing scripts and computes analytics. Returns a `.csv` with the aggregated analytics. You will need to use `spark-submit` to run this.
+1. `analytics.py`: Reads in object detections from the processing scripts and computes analytics. You will need to use `spark-submit` to run this. Does not return a `.csv` as output - another script does this.
 2. `bench.py`: Benchmarking script to evaluate the speedup when tuning the number of cores and executors.
 3. `bench_spark.py`: Helper script that is used during the benchmarking process.
 4. `heatmap.py`: Reads in object detections from the processing scripts and performs an aggregation that allows us to plot a heatmap of where people go over time windows. This is separated out because the aggregation process doesn't reduce the amount of data much compared to the other metrics such as average group size. Must be run with `spark-submit`.
