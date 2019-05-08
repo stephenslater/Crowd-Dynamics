@@ -54,16 +54,27 @@ Our pipeline looks like this:</p>
 
 <p>Our project can be split up into multiple stages.</p>
 
-<h3 id="video-processing-and-object-detection">Video Processing and Object Detection</h3>
+<h3 id="video-processing-object-detection">Video Processing Object Detection</h3>
 
-<p>First, we read in the historical video records of the Science Center Plaza and turn our collected video into 1 hour chunks.</p>
+<p>First, we read in the historical video records of the Science Center Plaza and turn our collected video into 1 hour chunks.
+To do much of this processing, we use <code class="highlighter-rouge">ffmpeg</code>. In order to mitigate overhead, we store month of data as compressed video, which reduces the amount we have to store to 23.8 GM instead of 6 TB.</p>
 
-<p>We then use a TensorFlow implementation of an object detection model to generate bounding boxes.
-In particular, we use a deep convolutional neural net using the Faster-RCNN architecture [1]
+<p>Store month of data as compressed video (23.8 GB instead of 6 TB)</p>
+
+<h3 id="object-detection">Object Detection</h3>
+
+<p>Once the video has been read in from the stream, we use a TensorFlow implementation of an object detection model to generate 
+bounding boxes. In particular, we use a deep convolutional neural net using the Faster-RCNN architecture [1]
 for detecting people, bicycles, cars, and trucks. We used a pretrained model that was trained on Microsoft COCO [2], 
 a dataset of common objects in context. The dataset is composed of a large number of images with a total of 91 unique
-objects with labels; however, we only care detecting pedestrians, so we only focus on detecting one class (person). 
-For each frame, we end up generating a timestamp, bounding boxes, and scores for confidence of detection in each of those 
+objects with labels; however, we only care detecting pedestrians, so we only focus on detecting one class (person).</p>
+
+<p>When feeding frames into the model, we initially considered processing video into tons of images, and then distributing those 
+images, but we noted that processing uncompressed images is too slow, as EC2 instances are bottlenecked by network bandwidth. 
+Therefore, in order to mitigate overhead, we instead distribute entire compressed videos to GPUs and have decompression into 
+individual frames on the same node that passes them through the model.</p>
+
+<p>For each frame, we end up generating a timestamp, bounding boxes, and scores for confidence of detection in each of those 
 bounding boxes. We save this output data to Spark dataframes, where each row contains the output generated from one frame, which are then used when we compute our analytics.</p>
 
 <p>We run this stage of our computation on a AWS EC2 instance with GPU, in particular a p3.8xlarge instance, which has 4 GPUs
@@ -139,7 +150,7 @@ We connect 2 nodes with an undirected edge <em>iff</em> the Euclidean distance b
 For person A in frame <script type="math/tex">i</script>, we need to identify the location of person A in frame <script type="math/tex">i+1</script>, and then approximate the velocity in frame i by dividing the distance traveled (between person A’s centers) by the time, which is the inverse of the fps (frames per second).</p>
 
 <p>So, first, we must link people between frames.
-Since people are constantly entering and leaving the frame, the number of objects per frame ($n_i$) may not be consistent between successive frames.
+Since people are constantly entering and leaving the frame, the number of objects per frame (<script type="math/tex">n_i</script>) may not be consistent between successive frames.
 Therefore, for each frame, we can compute at most <script type="math/tex">\text{min}(n_i, n_{i+1})</script> velocities.
 We compute pairwise distances between all objects in different frames, sort the pairs in ascending order of distance, and then greedily label each unassigned object in frame <script type="math/tex">i</script> to the closest unassigned object in frame <script type="math/tex">i+1</script>.
 We account for the edge case of a person leaving one end of the frame and another person entering on the opposite side of the next frame by only linking people whose distance is within a predefined threshold of 30% of the frame width or length.
@@ -174,6 +185,9 @@ and CV2 with matplotlib to draw the bounding boxes on the original video. See th
     <p>Lin, Tsung-Yi et al. “Microsoft COCO: Common Objects in Context.” Lecture Notes in Computer Science (2014): 740–755. Crossref. Web.</p>
   </li>
 </ol>
+
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+
 
   </div>
 
