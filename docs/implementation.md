@@ -71,9 +71,7 @@ Here is an example image, where the first frame (A) has 6 detected people, and t
 ### Visualizations
 We take the augmented Spark dataframe from our analytics step and convert it back into a Pandas dataframe for
 visualization. With this dataframe, create visualizations using the Bokeh library for interactive graphs,
-and CV2 with matplotlib to draw the bounding boxes on the original video.
-
-TODO: Add a more detail.
+and CV2 with matplotlib to draw the bounding boxes on the original video. See the [visualization](visualization.html) tab for various interactive plots!
 
 ## Citations
 
