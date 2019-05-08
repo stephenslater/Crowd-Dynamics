@@ -29,6 +29,51 @@ bounding boxes. We save this output data to Spark dataframes, where each row con
 We run this stage of our computation on a AWS EC2 instance with GPU, in particular a p3.8xlarge instance, which has 4 GPUs
 with a Deep Learning AMI (Ubuntu) Version 22.0.
 
+The output from the machine learning model looks something like this as a dataframe.
+Everything else needs to be calculated, windowed, and processed using spark.
+
+```bash
++-------------------+--------------------+--------------------+
+|              frame|              bboxes|              scores|
++-------------------+--------------------+--------------------+
+|1970-01-01 00:00:00|[0.59336024522781...|[0.93980032205581...|
+|1970-01-01 00:00:01|[0.62502855062484...|[0.89926099777221...|
+|1970-01-01 00:00:02|[0.72911220788955...|[0.98777532577514...|
+|1970-01-01 00:00:03|[0.78701549768447...|[0.97126829624176...|
+|1970-01-01 00:00:04|[0.48519986867904...|[0.93738293647766...|
+|1970-01-01 00:00:05|[0.67814970016479...|[0.97286134958267...|
+|1970-01-01 00:00:06|[0.57940828800201...|[0.98793494701385...|
+|1970-01-01 00:00:07|[0.71229845285415...|[0.98705601692199...|
+|1970-01-01 00:00:08|[0.34067243337631...|[0.77425789833068...|
+|1970-01-01 00:00:09|[0.78984218835830...|[0.97743964195251...|
+|1970-01-01 00:00:10|[0.39440840482711...|[0.92999798059463...|
+|1970-01-01 00:00:11|[0.60313117504119...|[0.93863993883132...|
+|1970-01-01 00:00:12|[0.82778960466384...|[0.91649687290191...|
+|1970-01-01 00:00:13|[0.51006656885147...|[0.97323024272918...|
+|1970-01-01 00:00:14|[0.56186217069625...|[0.89469927549362...|
+|1970-01-01 00:00:15|[0.67285186052322...|[0.97309362888336...|
+|1970-01-01 00:00:16|[0.35979881882667...|[0.84619909524917...|
+|1970-01-01 00:00:17|[0.39222764968872...|[0.71783727407455...|
+|1970-01-01 00:00:18|[0.47849225997924...|[0.92085105180740...|
+|1970-01-01 00:00:19|[0.51487535238265...|[0.81251215934753...|
++-------------------+--------------------+--------------------+
+only showing top 20 rows
+```
+
+with only three columns for simplicity.
+The corresponding schema is
+
+```bash
+root
+ |-- frame: timestamp (nullable = false)
+ |-- bboxes: array (nullable = true)
+ |    |-- element: double (containsNull = true)
+ |-- scores: array (nullable = true)
+ |    |-- element: double (containsNull = true)
+```
+
+The Spark Dataframe is now used for our metrics.
+
 ### Analytics
 
 To perform our analytics, we apply user defined function transformations to the columns of the Spark dataframes from the 
