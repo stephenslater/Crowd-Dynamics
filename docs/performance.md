@@ -4,7 +4,7 @@ title: Performance
 
 ## Process
 
-To measure scaling we used an AWS EMR cluster of 8 m4.xlarge workers with 4 cores each to compute historical analytics on the detected objects that we identified from 850 GB of video.
+To measure scaling we used an AWS EMR cluster of 8 m4.xlarge workers (which have 4 cores each) to compute historical analytics on the detected objects that we identified from 150 GB of video.
 
 ![8nodes](images/8nodes.png)
 
@@ -29,12 +29,14 @@ TODO: Talk about performance -->
 
 ## Strong Scaling
 
-Strong scaling (fixed problem size) of aggregation of 100 hours of bounding boxes into 20-minute windows
+We evaluate strong scaling (fixed problem size) for our analytics/aggregation stage for historical data processing. We do this 
+by running our analytics/aggregation code on of 100 hours of bounding boxes (Spark dataframes output from the object detection 
+stage) with aggregation into 10-minute windows. We vary the computation by varying the number of executors and executors per 
+core.
 
+The following is a plot of our speedup results for various numbers of executors and executors per core on Spark, as well as a table containing the same information.
 
-<img src="{{ "images/speedup.png" | relative_url}}" >
-
-Runtime measured in seconds. Serial time was 562.4888223648071 s
+<img src="{{ "images/strong.png" | relative_url}}" >
 
 | # Executors (Row) / Cores (Col) | 1 | 2 | 3 | 4 |
 | :-------------------: |:-:|:-:|:-:|:-:|:-:|
@@ -47,6 +49,32 @@ Runtime measured in seconds. Serial time was 562.4888223648071 s
 |           7           | 128.5110889911652 | 106.3509711265564 | 103.2844680309296 | 103.79440789222717 |
 |           8           | 118.0175147533417 | 95.38883476257324 | 98.73593525886535 | 91.498237657547 |
 
+TODO: Add analysis
+
+## Weak Scaling
+
+TODO
+
+## Fixed Computation Scaling
+
+We evaluate fixed computation scaling for our analytics/aggregation stage for historical data processing. We again do this by running our analytics/aggregation code on various amounts of bounding boxes (Spark dataframes output from the object detection stage) with aggregation into 10-minute windows. In particular, to vary the amount of data that we feed in, we duplicate our 100 hours of data various numbers of time.
+
+The following is a plot of our speedup results for various numbers of executors and executors per core on Spark, as well as a table containing the same information.
+
+<img src="{{ "images/strong.png" | relative_url}}" >
+
+| # Duplications of data | Runtime (s)
+| :-------------------: |:-:|
+|           1           | 105.96309661865234 |
+|           2           | 155.95204782485962 |
+|           3           | 189.80698084831238 |
+|           4           | 213.94005870819092 |
+|           6           | 284.8611829280853 |
+|           8           | 361.21924901008606 |
+|           12           | 515.224663734436 |
+|           16           | 629.3407850265503 |
+
+TODO: Add analysis
 
 
 <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
