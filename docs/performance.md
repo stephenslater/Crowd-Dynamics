@@ -4,7 +4,7 @@ title: Performance
 
 ## Process
 
-To measure scaling we used an AWS EMR cluster of 8 m4.xlarge workers with 4 cores each to compute historical analytics on the detected objects that we identified from 150 GB of video.
+To measure scaling we used an AWS EMR cluster of 8 m4.xlarge workers with 4 cores each to compute historical analytics on the detected objects that we identified from 850 GB of video.
 
 ![8nodes](images/8nodes.png)
 
@@ -34,6 +34,8 @@ Strong scaling (fixed problem size) of aggregation of 100 hours of bounding boxe
 
 <img src="{{ "images/speedup.png" | relative_url}}" >
 
+Runtime measured in seconds. Serial time was 562.4888223648071 s
+
 | # Executors (Row) / Cores (Col) | 1 | 2 | 3 | 4 |
 | :-------------------: |:-:|:-:|:-:|:-:|:-:|
 |           1           | 130.6036292552948 | 151.8580044269562 | 164.2707266330719 | 149.00747709274293 |
@@ -48,7 +50,3 @@ Strong scaling (fixed problem size) of aggregation of 100 hours of bounding boxe
 
 
 <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
-
-
-
-

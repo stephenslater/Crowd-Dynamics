@@ -115,7 +115,7 @@ In order to compute the average velocity in each frame, we must consider the det
 For person A in frame $$i$$, we need to identify the location of person A in frame $$i+1$$, and then approximate the velocity in frame i by dividing the distance traveled (between person A's centers) by the time, which is the inverse of the fps (frames per second).
 
 So, first, we must link people between frames.
-Since people are constantly entering and leaving the frame, the number of objects per frame ($n_i$) may not be consistent between successive frames.
+Since people are constantly entering and leaving the frame, the number of objects per frame ($$n_i$$) may not be consistent between successive frames.
 Therefore, for each frame, we can compute at most $$\text{min}(n_i, n_{i+1})$$ velocities.
 We compute pairwise distances between all objects in different frames, sort the pairs in ascending order of distance, and then greedily label each unassigned object in frame $$i$$ to the closest unassigned object in frame $$i+1$$.
 We account for the edge case of a person leaving one end of the frame and another person entering on the opposite side of the next frame by only linking people whose distance is within a predefined threshold of 30% of the frame width or length.
@@ -145,3 +145,5 @@ and CV2 with matplotlib to draw the bounding boxes on the original video. See th
 1. Ren, Shaoqing et al. “Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks.” IEEE Transactions on Pattern Analysis and Machine Intelligence 39.6 (2017): 1137–1149. Crossref. Web.
 
 2. Lin, Tsung-Yi et al. “Microsoft COCO: Common Objects in Context.” Lecture Notes in Computer Science (2014): 740–755. Crossref. Web.
+
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>

@@ -67,13 +67,17 @@ execution model.</p>
 
 <h2 id="data-software-and-infrastructure">Data, Software, and Infrastructure</h2>
 
-<p>We continuously captured from the Science Center Plaza Webcam over the course of multiple weeks.</p>
+<p>We continuously collected from the Science Center Plaza Webcam over the course of multiple weeks from 4/5/19 to 5/3/19.</p>
 
 <p>The basic outline of our solutions is as follows. We begin by feeding our data through an object detection
 model to obtain bounding boxes identifying person locations. We then compute analytics such as number of
-people, velocities, gorup sizes, and locations based on bounding boxes. For historical analysis, we then
+people, velocities, group sizes, and locations based on bounding boxes. For historical analysis, we then
 perform some aggregation of these statistics over short periods of time. For streaming, we just directly work
 with the output analytics. After analytics computation is complete, we feed the results into a variety of visualizations.</p>
+
+<p>Note that our basic features are use of Spark and GPU, and our advanced feature is use of TensorFlow for our ML model.
+Our advanced functionality, we had scheduling of deep learning jobs across 4 GPUs, an alert system comparing real-time 
+analytics to historical data for the corresponding hour, and a variety of visualizations including interactive plots.</p>
 
 <p>We use AWS EC2 GPU instances to run object detection, and Spark on AWS EMR to perform analytics computation.</p>
 
@@ -84,10 +88,19 @@ with the output analytics. After analytics computation is complete, we feed the 
 <p>Our code can be found on Github
 <a href="http://www.github.com/stephenslater/crowd-dynamics">here</a>.</p>
 
-<p>Our data can be found on S3:
-    * Processed Bounding Boxes: <a href="https://s3.amazonaws.com/science-center-plaza-data/data/all_detections.tar.gz">here</a>
-    * Processed Bounding Boxes Combined: <a href="https://s3.amazonaws.com/science-center-plaza-data/data/all_detections_combined.tar.gz">here</a>
-    * Video Data: <a href="https://s3.console.aws.amazon.com/s3/buckets/science-center-plaza-data">here</a></p>
+<p>Our data can be found on S3:</p>
+
+<ul>
+  <li>
+    <p>Processed Bounding Boxes: <a href="https://s3.amazonaws.com/science-center-plaza-data/data/all_detections.tar.gz">here</a></p>
+  </li>
+  <li>
+    <p>Processed Bounding Boxes Combined: <a href="https://s3.amazonaws.com/science-center-plaza-data/data/all_detections_combined.tar.gz">here</a></p>
+  </li>
+  <li>
+    <p>Video Data: <a href="https://s3.console.aws.amazon.com/s3/buckets/science-center-plaza-data">here</a></p>
+  </li>
+</ul>
 
 <h2 id="visualizations">Visualizations</h2>
 
@@ -110,6 +123,27 @@ In the data, we are able to see:</p>
     <li>How long people stay in the science center plaza to eat.</li>
     <li>and many more!</li>
 </ul>
+
+<h2 id="conclusions">Conclusions</h2>
+
+<p>Overall, we successfully used big data and big compute infrastructures combined with TensorFlow to develop analytics of 
+real-time crowd dynamics compared to historical data for the Science Center Plaza.</p>
+
+<p>We ran into a few challenges in the course of our work. First, Databricks was unhelpful in distributing TensorFlow model 
+across GPUs, so we ended up using an AWS EC2 GPU instance (p3.8xlarge) with 4 GPUs for our object detection model
+evaluation instead. We also tried to do some data processing and cleaning in PySpark before computation, but the API 
+was severely limited due to distribution requirements (i.e. difficult to associate data across columns, create arbitrary data, 
+and work with multi-dimensional arrays). Our solution to this was to perform some preprocessing in plain Python. We discovered
+empirically that UDFs with 2-column inputs would not parallelize well (the cluster was reverting to using only 1 core on 1 
+executor), so we concatenated and flattened bounding box data for adjacent frames to compute successive-frame statistics
+(e.g., velocity) using a single row.</p>
+
+<p>From these challenges, we learned that data format needs to be very carefully selected before loading it into a Spark 
+Dataframe, and we need to be careful when developing how to compute analytics, and which metrics to compute in a distributed 
+system (i.e. choice of UDF).</p>
+
+<p>In the future, we might want to handle more than one camera for the streaming (if there were more cameras) and take advantage 
+of GPU IO system with AWS (NV-Link).</p>
 </div>
 
       </div>
