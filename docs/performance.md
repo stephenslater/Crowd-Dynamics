@@ -49,7 +49,7 @@ The following is a plot of our speedup results for various numbers of executors 
 |           7           | 128.5110889911652 | 106.3509711265564 | 103.2844680309296 | 103.79440789222717 |
 |           8           | 118.0175147533417 | 95.38883476257324 | 98.73593525886535 | 91.498237657547 |
 
-TODO: Add analysis
+We see in general the speedup increases with number of executors. The point at which this increase begins is later if we use fewer cores per executor. For instance, for 1 core per executor, the speedup stays roughly the same or goes down a bit until we hit 6 or 7 executors, while for 4 cores per executor, the speedup consistently increases as we have 3 or more executors. We hypothesize this is due to various overheads, such as communication between nodes, that is might be able to be multithreaded within an executor if that executor has more cores, but cannot be likewise parallelized if there are insuffiently many cores.
 
 ## Weak Scaling
 
@@ -61,7 +61,7 @@ We evaluate fixed computation scaling for our analytics/aggregation stage for hi
 
 The following is a plot of our speedup results for various numbers of executors and executors per core on Spark, as well as a table containing the same information.
 
-<img src="{{ "images/strong.png" | relative_url}}" >
+<img src="{{ "images/fixed_comp.png" | relative_url}}" >
 
 | # Duplications of data | Runtime (s)
 | :-------------------: |:-:|
@@ -74,7 +74,7 @@ The following is a plot of our speedup results for various numbers of executors 
 |           12           | 515.224663734436 |
 |           16           | 629.3407850265503 |
 
-TODO: Add analysis
+We observe that the runtime appears to scale roughly linearly with the problem size.
 
 
 <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
