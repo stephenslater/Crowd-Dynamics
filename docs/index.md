@@ -45,15 +45,15 @@ We use AWS EC2 GPU instances to run object detection, and Spark on AWS EMR to pe
 
 See the [implementation page](implementation.html) for more details on our software and infrastructure.
 
-
 ## Code and Data
 
 Our code can be found on Github
 [here](http://www.github.com/stephenslater/crowd-dynamics).
 
-Our data can be found on S3
-
-TODO: Add S3 links to our data files.
+Our data can be found on S3:
+    * Processed Bounding Boxes: [here](https://s3.amazonaws.com/science-center-plaza-data/data/all_detections.tar.gz)
+    * Processed Bounding Boxes Combined: [here](https://s3.amazonaws.com/science-center-plaza-data/data/all_detections_combined.tar.gz)
+    * Video Data: [here](https://s3.console.aws.amazon.com/s3/buckets/science-center-plaza-data)
 
 ## Visualizations
 
