@@ -69,3 +69,26 @@ detections are reasonable.
         frameborder="0"
         allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="youtube"
         style="padding:20px;"></iframe>
+
+## Historical Data
+
+Once we analyzed the video recordings in the science center, we are able to
+get historical averages of common statistics like number of people, velocity,
+and group size, and alert the user if current conditions differ greatly
+from historical averages.
+For comparing our streaming analytics with history, we averaged all of the
+statistics over hour periods and compare.
+The statistics over each hour period for the month of April looked like this.
+
+<p align="center"> 
+<img src="images/perframeanalytics.png">
+</p>
+
+Then, using these historical averages, we alert the user when our livestream
+differs by too much.
+This alert can be implemented to look something like this.
+
+<iframe width="640" height="360" src="https://www.youtube.com/embed/HT1Xs0Hrt_M"
+        frameborder="0"
+        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="youtube"
+        style="padding:20px;"></iframe>
