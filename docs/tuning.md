@@ -9,7 +9,7 @@ The Science Center plaza webcam has no labels, and it would be infeasible
 for us to provide ground truth labels for this dataset.
 Therefore, we used a pretrained model from the Microsoft COCO dataset.
 The Microsoft COCO dataset has labeled images of people, trucks, bicycles,
-cars, and many more relevant classes - however, the images are usually from
+cars, and many more relevant classes--however, the images are usually from
 a different perspective and very different distance.
 Therefore, we cannot use the reported mAP (mean Average Precision) for these models, and will have
 to evaluate the performance of these models visually.
