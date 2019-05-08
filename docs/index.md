@@ -8,7 +8,7 @@ The Science Center plaza is a very popular area, home to food trucks, students,
 and tourists. The Science Center Plaza also has a live stream video feed 24 
 hours per day, which you can check out
 [here](https://commonspaces.harvard.edu/plaza-webcam).
-However, can we use this data to make decisions, such as when to schedule
+Can we use this data to make decisions, such as when to schedule
 events in the plaza?
 
 Our project provides real-time crowd analytics with object detection of people
@@ -23,12 +23,12 @@ movement.
 
 This problem requires the use of multiple frameworks:
 
-* __Big Data:__ because we process 150 GB of low-resolution historical video.
+* __Big Data:__ because we process 850 GB (the four days used for performance evaluation) of low-resolution historical video.
 * __Big Compute/HPC:__ handling the throughput for streaming analytics of real-time science
-center plaza video feed
+center plaza video feed.
 
 With the Big Data part of our solution, we have fine-grained data parallelism and a SPMD execution model,
-while with the Big Compute component, we have coarse-grained data and functional parallelism and a DAT
+while with the Big Compute component, we have coarse-grained data and functional parallelism and a DAG
 execution model.
 
 ## Data, Software, and Infrastructure
@@ -41,9 +41,12 @@ people, velocities, group sizes, and locations based on bounding boxes. For hist
 perform some aggregation of these statistics over short periods of time. For streaming, we just directly work
 with the output analytics. After analytics computation is complete, we feed the results into a variety of visualizations.
 
-Note that our basic features are use of Spark and GPU, and our advanced feature is use of TensorFlow for our ML model.
-Our advanced functionality, we had scheduling of deep learning jobs across 4 GPUs, an alert system comparing real-time 
-analytics to historical data for the corresponding hour, and a variety of visualizations including interactive plots.
+Note that our basic features are the use of Spark and GPU, and our advanced feature
+is use of TensorFlow for our ML model and implementation of real-time video analytics.
+For the TensorFlow advanced functionality, we scheduled deep learning jobs across 4 GPUs. 
+We also implemented an alert system comparing real-time 
+analytics to historical data for the corresponding hour,
+and produced a variety of visualizations including interactive plots.
 
 We use AWS EC2 GPU instances to run object detection, and Spark on AWS EMR to perform analytics computation.
 
@@ -72,7 +75,7 @@ Our data can be found on S3:
 <!-- </div> -->
 
 Check out more visualizations [here!](visualizations.html)
-Through the use of deep convolution neural networks and big data platforms
+Through the use of deep convolutional neural networks and big data platforms
 such as Spark, we are able to quantify some of the patterns in the Science
 Center.
 In the data, we are able to see:
@@ -81,15 +84,16 @@ In the data, we are able to see:
     <li>Tour groups traveling through the yard.</li>
     <li>The line for food trucks.</li>
     <li>The influx of people when classes are dismissed.</li>
-    <li>How long people stay in the science center plaza to eat.</li>
+    <li>How long people stay in the Science Center Plaza to eat.</li>
     <li>and many more!</li>
 </ul>
 
 ## Conclusions
 
+For more information, please see the presentation tab or look [here.](presentations.md).
+
 Overall, we successfully used big data and big compute infrastructures combined with TensorFlow to develop analytics of 
 real-time crowd dynamics compared to historical data for the Science Center Plaza.
-
 
 We ran into a few challenges in the course of our work. First, Databricks was unhelpful in distributing TensorFlow model 
 across GPUs, so we ended up using an AWS EC2 GPU instance (p3.8xlarge) with 4 GPUs for our object detection model
