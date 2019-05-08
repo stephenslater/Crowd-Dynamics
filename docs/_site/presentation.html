@@ -4,17 +4,17 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="shortcut icon" href="/images/fav.png"><!-- Begin Jekyll SEO tag v2.5.0 -->
-<title>Tuning | Crowd Dynamics at Harvard University</title>
+<title>Presentation | Crowd Dynamics at Harvard University</title>
 <meta name="generator" content="Jekyll v3.8.5" />
-<meta property="og:title" content="Tuning" />
+<meta property="og:title" content="Presentation" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Repository for CS 205 Final Project, Spring 2019" />
 <meta property="og:description" content="Repository for CS 205 Final Project, Spring 2019" />
-<link rel="canonical" href="http://localhost:4000/tuning.html" />
-<meta property="og:url" content="http://localhost:4000/tuning.html" />
+<link rel="canonical" href="http://localhost:4000/presentation.html" />
+<meta property="og:url" content="http://localhost:4000/presentation.html" />
 <meta property="og:site_name" content="Crowd Dynamics at Harvard University" />
 <script type="application/ld+json">
-{"url":"http://localhost:4000/tuning.html","headline":"Tuning","description":"Repository for CS 205 Final Project, Spring 2019","@type":"WebPage","@context":"http://schema.org"}</script>
+{"url":"http://localhost:4000/presentation.html","headline":"Presentation","description":"Repository for CS 205 Final Project, Spring 2019","@type":"WebPage","@context":"http://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Crowd Dynamics at Harvard University" /></head><body><header class="site-header" style="display: flex">
         <img class="h_logo" src="/images/seas.png" >
@@ -37,57 +37,13 @@
         <article class="post">
 
   <header class="post-header">
-    <h1 class="post-title">Tuning</h1>
+    <h1 class="post-title">Presentation</h1>
   </header>
 
   <div class="post-content">
-    <h2 id="object-detection-model-selection">Object Detection Model Selection</h2>
+    <p>Below are the slides from our final CS205 Presentation.</p>
 
-<p>One of the most important parts of our pipeline is the object detection model
-that produces bounding boxes for our further analysis.
-The Science Center plaza webcam has no labels, and it would be infeasible
-for us to provide ground truth labels for this dataset.
-Therefore, we used a pretrained model from the Microsoft COCO dataset.
-The Microsoft COCO dataset has labeled images of people, trucks, bicycles,
-cars, and many more relevant classes - however, the images are usually from
-a different perspective and very different distance.
-Therefore, we cannot use the reported mAP for these models, and will have
-to evaluate the performance of these models by eye.
-We looked at the archiectures:</p>
-
-<ul>
-  <li>Faster-RCNN</li>
-  <li>SSD</li>
-  <li>YOLO</li>
-</ul>
-
-<p>We also looked at the following pretty standard feature extractors:</p>
-
-<ul>
-  <li>Resnet-50</li>
-  <li>Resnet-101</li>
-  <li>Inception-V2</li>
-</ul>
-
-<p>We can evaluate these pretained models side by side.</p>
-
-<h3 id="comparisons-of-different-models">Comparisons of Different Models</h3>
-
-<p>There is a tradeoff between how long it takes for inference and the quality
-of the predictions.
-We evaluate the model’s performance during different times of the day.</p>
-
-<h4 id="daytime-not-crowded">Daytime, Not Crowded</h4>
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/F08-z8duKIE" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" class="youtube"></iframe>
-
-<h4 id="slightly-darker-not-crowded">Slightly Darker, Not Crowded</h4>
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/ZR53NL4JOVU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" class="youtube"></iframe>
-
-<h4 id="nighttime-around-8-pm">Nighttime, around 8 PM</h4>
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/KnjFIt1sypg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" class="youtube"></iframe>
+<iframe src="https://docs.google.com/presentation/d/e/2PACX-1vQ5xL9QMTyNrIyxpPGIFbjeY2csvTeN8PULE2BzKXHXQpryPr23X8qeuDJx_4XclcC-O1Biu06r_ZTm/embed?start=false&amp;loop=false&amp;delayms=3000" frameborder="0" width="960" height="569" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
 
   </div>
 

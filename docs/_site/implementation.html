@@ -28,7 +28,7 @@
             </span>
           </label>
   
-          <div class="trigger"><a class="page-link" href="/">Overview</a><a class="page-link" href="/implementation.html">Implementation</a><a class="page-link" href="/tuning.html">Tuning</a><a class="page-link" href="/performance.html">Performance</a><a class="page-link" href="/visualizations.html">Visualizations</a></div>
+          <div class="trigger"><a class="page-link" href="/">Overview</a><a class="page-link" href="/implementation.html">Implementation</a><a class="page-link" href="/tuning.html">Tuning</a><a class="page-link" href="/performance.html">Performance</a><a class="page-link" href="/visualizations.html">Visualizations</a><a class="page-link" href="/presentation.html">Presentation</a></div>
         </nav></div>
         <img class="h_logo" src="/images/iacs.png" >
   </header>
@@ -68,6 +68,49 @@ bounding boxes. We save this output data to Spark dataframes, where each row con
 
 <p>We run this stage of our computation on a AWS EC2 instance with GPU, in particular a p3.8xlarge instance, which has 4 GPUs
 with a Deep Learning AMI (Ubuntu) Version 22.0.</p>
+
+<p>The output from the machine learning model looks something like this as a dataframe.
+Everything else needs to be calculated, windowed, and processed using spark.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>+-------------------+--------------------+--------------------+
+|              frame|              bboxes|              scores|
++-------------------+--------------------+--------------------+
+|1970-01-01 00:00:00|[0.59336024522781...|[0.93980032205581...|
+|1970-01-01 00:00:01|[0.62502855062484...|[0.89926099777221...|
+|1970-01-01 00:00:02|[0.72911220788955...|[0.98777532577514...|
+|1970-01-01 00:00:03|[0.78701549768447...|[0.97126829624176...|
+|1970-01-01 00:00:04|[0.48519986867904...|[0.93738293647766...|
+|1970-01-01 00:00:05|[0.67814970016479...|[0.97286134958267...|
+|1970-01-01 00:00:06|[0.57940828800201...|[0.98793494701385...|
+|1970-01-01 00:00:07|[0.71229845285415...|[0.98705601692199...|
+|1970-01-01 00:00:08|[0.34067243337631...|[0.77425789833068...|
+|1970-01-01 00:00:09|[0.78984218835830...|[0.97743964195251...|
+|1970-01-01 00:00:10|[0.39440840482711...|[0.92999798059463...|
+|1970-01-01 00:00:11|[0.60313117504119...|[0.93863993883132...|
+|1970-01-01 00:00:12|[0.82778960466384...|[0.91649687290191...|
+|1970-01-01 00:00:13|[0.51006656885147...|[0.97323024272918...|
+|1970-01-01 00:00:14|[0.56186217069625...|[0.89469927549362...|
+|1970-01-01 00:00:15|[0.67285186052322...|[0.97309362888336...|
+|1970-01-01 00:00:16|[0.35979881882667...|[0.84619909524917...|
+|1970-01-01 00:00:17|[0.39222764968872...|[0.71783727407455...|
+|1970-01-01 00:00:18|[0.47849225997924...|[0.92085105180740...|
+|1970-01-01 00:00:19|[0.51487535238265...|[0.81251215934753...|
++-------------------+--------------------+--------------------+
+only showing top 20 rows
+</code></pre></div></div>
+
+<p>with only three columns for simplicity.
+The corresponding schema is</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root
+ |-- frame: timestamp <span class="o">(</span>nullable <span class="o">=</span> <span class="nb">false</span><span class="o">)</span>
+ |-- bboxes: array <span class="o">(</span>nullable <span class="o">=</span> <span class="nb">true</span><span class="o">)</span>
+ |    |-- element: double <span class="o">(</span>containsNull <span class="o">=</span> <span class="nb">true</span><span class="o">)</span>
+ |-- scores: array <span class="o">(</span>nullable <span class="o">=</span> <span class="nb">true</span><span class="o">)</span>
+ |    |-- element: double <span class="o">(</span>containsNull <span class="o">=</span> <span class="nb">true</span><span class="o">)</span>
+</code></pre></div></div>
+
+<p>The Spark Dataframe is now used for our metrics.</p>
 
 <h3 id="analytics">Analytics</h3>
 
@@ -109,9 +152,17 @@ In particular, we compute the Euclidean distance between the centers (where the 
 </p>
 
 <h3 id="visualizations">Visualizations</h3>
+
 <p>We take the augmented Spark dataframe from our analytics step and convert it back into a Pandas dataframe for
-visualization. With this dataframe, create visualizations using the Bokeh library for interactive graphs,
-and CV2 with matplotlib to draw the bounding boxes on the original video. See the <a href="visualization.html">visualization</a> tab for various interactive plots!</p>
+visualization. 
+The pandas dataframe looks something like this:</p>
+
+<p align="center"> 
+<img src="images/processed_dataframe.png" />
+</p>
+
+<p>With this dataframe, we create visualizations using the Bokeh library for interactive graphs,
+and CV2 with matplotlib to draw the bounding boxes on the original video. See the <a href="visualizations.html">visualizations</a> tab for various interactive plots!</p>
 
 <h2 id="citations">Citations</h2>
 
