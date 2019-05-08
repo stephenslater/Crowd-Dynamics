@@ -43,7 +43,7 @@
   <div class="post-content">
     <h2 id="process">Process</h2>
 
-<p>To measure scaling we used an AWS EMR cluster of 8 m4.xlarge workers with 4 cores each to compute historical analytics on the detected objects that we identified from 850 GB of video.</p>
+<p>To measure scaling we used an AWS EMR cluster of 8 m4.xlarge workers (which have 4 cores each) to compute historical analytics on the detected objects that we identified from 150 GB of video.</p>
 
 <p><img src="/images/8nodes.png" alt="8nodes" /></p>
 
@@ -67,11 +67,14 @@ TODO: Talk about performance -->
 
 <h2 id="strong-scaling">Strong Scaling</h2>
 
-<p>Strong scaling (fixed problem size) of aggregation of 100 hours of bounding boxes into 20-minute windows</p>
+<p>We evaluate strong scaling (fixed problem size) for our analytics/aggregation stage for historical data processing. We do this 
+by running our analytics/aggregation code on of 100 hours of bounding boxes (Spark dataframes output from the object detection 
+stage) with aggregation into 10-minute windows. We vary the computation by varying the number of executors and executors per 
+core.</p>
 
-<p><img src="/images/speedup.png" /></p>
+<p>The following is a plot of our speedup results for various numbers of executors and executors per core on Spark, as well as a table containing the same information.</p>
 
-<p>Runtime measured in seconds. Serial time was 562.4888223648071 s</p>
+<p><img src="/images/strong.png" /></p>
 
 <table>
   <thead>
@@ -142,6 +145,65 @@ TODO: Talk about performance -->
     </tr>
   </tbody>
 </table>
+
+<p>TODO: Add analysis</p>
+
+<h2 id="weak-scaling">Weak Scaling</h2>
+
+<p>TODO</p>
+
+<h2 id="fixed-computation-scaling">Fixed Computation Scaling</h2>
+
+<p>We evaluate fixed computation scaling for our analytics/aggregation stage for historical data processing. We again do this by running our analytics/aggregation code on various amounts of bounding boxes (Spark dataframes output from the object detection stage) with aggregation into 10-minute windows. In particular, to vary the amount of data that we feed in, we duplicate our 100 hours of data various numbers of time.</p>
+
+<p>The following is a plot of our speedup results for various numbers of executors and executors per core on Spark, as well as a table containing the same information.</p>
+
+<p><img src="/images/strong.png" /></p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center"># Duplications of data</th>
+      <th style="text-align: center">Runtime (s)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">105.96309661865234</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">2</td>
+      <td style="text-align: center">155.95204782485962</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">3</td>
+      <td style="text-align: center">189.80698084831238</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">4</td>
+      <td style="text-align: center">213.94005870819092</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">6</td>
+      <td style="text-align: center">284.8611829280853</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">8</td>
+      <td style="text-align: center">361.21924901008606</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">12</td>
+      <td style="text-align: center">515.224663734436</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">16</td>
+      <td style="text-align: center">629.3407850265503</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>TODO: Add analysis</p>
 
 <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
 
