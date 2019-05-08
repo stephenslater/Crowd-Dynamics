@@ -14,17 +14,31 @@ Our pipeline looks like this:
 
 Our project can be split up into multiple stages.
 
-### Video Processing and Object Detection
+### Video Processing Object Detection
 
 First, we read in the historical video records of the Science Center Plaza and turn our collected video into 1 hour chunks.
+To do much of this processing, we use `ffmpeg`. In order to mitigate overhead, we store month of data as compressed video, which reduces the amount we have to store to 23.8 GM instead of 6 TB.
 
-We then use a TensorFlow implementation of an object detection model to generate bounding boxes.
-In particular, we use a deep convolutional neural net using the Faster-RCNN architecture [1]
+
+
+Store month of data as compressed video (23.8 GB instead of 6 TB)
+
+
+### Object Detection
+
+Once the video has been read in from the stream, we use a TensorFlow implementation of an object detection model to generate 
+bounding boxes. In particular, we use a deep convolutional neural net using the Faster-RCNN architecture [1]
 for detecting people, bicycles, cars, and trucks. We used a pretrained model that was trained on Microsoft COCO [2], 
 a dataset of common objects in context. The dataset is composed of a large number of images with a total of 91 unique
 objects with labels; however, we only care detecting pedestrians, so we only focus on detecting one class (person). 
+
+When feeding frames into the model, we initially considered processing video into tons of images, and then distributing those 
+images, but we noted that processing uncompressed images is too slow, as EC2 instances are bottlenecked by network bandwidth. 
+Therefore, in order to mitigate overhead, we instead distribute entire compressed videos to GPUs and have decompression into 
+individual frames on the same node that passes them through the model.
+
 For each frame, we end up generating a timestamp, bounding boxes, and scores for confidence of detection in each of those 
-bounding boxes. We save this output data to Spark dataframes, where each row contains the output generated from one frame, which are then used when we compute our analytics.
+bounding boxes. We save this output data to Spark dataframes, where each row contains the output generated from one frame, which are then used when we compute our analytics. 
 
 We run this stage of our computation on a AWS EC2 instance with GPU, in particular a p3.8xlarge instance, which has 4 GPUs
 with a Deep Learning AMI (Ubuntu) Version 22.0.
