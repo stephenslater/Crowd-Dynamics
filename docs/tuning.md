@@ -9,17 +9,17 @@ The Science Center plaza webcam has no labels, and it would be infeasible
 for us to provide ground truth labels for this dataset.
 Therefore, we used a pretrained model from the Microsoft COCO dataset.
 The Microsoft COCO dataset has labeled images of people, trucks, bicycles,
-cars, and many more relevant classes - however, the images are usually from
+cars, and many more relevant classes--however, the images are usually from
 a different perspective and very different distance.
-Therefore, we cannot use the reported mAP for these models, and will have
-to evaluate the performance of these models by eye.
-We looked at the archiectures:
+Therefore, we cannot use the reported mAP (mean Average Precision) for these models, and will have
+to evaluate the performance of these models visually.
+We looked at the architectures:
 
 * Faster-RCNN
 * SSD
 * YOLO
 
-We also looked at the following pretty standard feature extractors:
+We also looked at the following standard feature extractors:
 
 * Resnet-50
 * Resnet-101
@@ -30,7 +30,8 @@ We can evaluate these pretained models side by side.
 ### Comparisons of Different Models
 
 There is a tradeoff between how long it takes for inference and the quality
-of the predictions.
+of the predictions. The model with the best quality (Faster-RCNN with Resnet-101) has the slowest inference time. We chose to use this model due to the best performance in object detection.
+
 We evaluate the model's performance during different times of the day.
 
 #### Daytime, Not Crowded
